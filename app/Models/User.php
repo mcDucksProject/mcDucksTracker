@@ -14,6 +14,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * App\Models\User
@@ -44,9 +45,9 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|\App\Models\Portfolio[] $portfolios
  * @property-read int|null $portfolios_count
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens,HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
