@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Scopes\UserScope;
 use Database\Factories\PortfolioFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,24 +23,28 @@ use Illuminate\Support\Carbon;
  * @mixin Eloquent
  * @property int $id
  * @property string $name
- * @property int $user_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property int                                                   $user_id
+ * @property Carbon|null                                           $created_at
+ * @property Carbon|null                                           $updated_at
+ * @property string|null                                           $deleted_at
  * @method static Builder|Portfolio whereCreatedAt($value)
  * @method static Builder|Portfolio whereDeletedAt($value)
  * @method static Builder|Portfolio whereId($value)
  * @method static Builder|Portfolio whereName($value)
  * @method static Builder|Portfolio whereUpdatedAt($value)
  * @method static Builder|Portfolio whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Trade[] $trades
- * @property-read int|null $trades_count
- * @property-read \App\Models\User $user
+ * @property-read Collection|Trade[] $trades
+ * @property-read int|null                                         $trades_count
+ * @property-read User                                             $user
  */
 class Portfolio extends Model
 {
     use HasFactory;
 
+    public static function booted()
+    {
+        static::addGlobalScope(new UserScope());
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
