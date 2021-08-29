@@ -44,6 +44,12 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static Builder|User whereUpdatedAt($value)
  * @property-read Collection|\App\Models\Portfolio[] $portfolios
  * @property-read int|null $portfolios_count
+ * @property string|null $two_factor_secret
+ * @property string|null $two_factor_recovery_codes
+ * @property-read Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static Builder|User whereTwoFactorRecoveryCodes($value)
+ * @method static Builder|User whereTwoFactorSecret($value)
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

@@ -1,18 +1,9 @@
 POST http://127.0.0.1/api/sanctum/token
-Content-Type: multipart/form-data; boundary=WebAppBoundary
+Content-Type: application/json
 Accept: application/json
 
---WebAppBoundary
-Content-Disposition: form-data; name="email"
-
-luke@jedi.com
-
---WebAppBoundary
-Content-Disposition: form-data; name="password"
-
-password
---WebAppBoundary
-Content-Disposition: form-data; name="device_name"
-
-postman
---WebAppBoundary--
+{
+    "email": "luke@jedi.com",
+    "password": "password",
+    "device_name": "phpStorm"
+}
