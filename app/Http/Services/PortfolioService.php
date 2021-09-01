@@ -25,7 +25,7 @@ class PortfolioService
     /**
      * @throws SaveException
      */
-    function update($portfolioId, $name, $userId): Portfolio
+    function update($portfolioId, $name): Portfolio
     {
         $portfolio = Portfolio::findOrFail($portfolioId);
         $portfolio->name = $name;

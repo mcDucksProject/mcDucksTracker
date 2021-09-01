@@ -21,21 +21,21 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Portfolio newQuery()
  * @method static Builder|Portfolio query()
  * @mixin Eloquent
- * @property int $id
- * @property string $name
- * @property int                                                   $user_id
- * @property Carbon|null                                           $created_at
- * @property Carbon|null                                           $updated_at
- * @property string|null                                           $deleted_at
+ * @property int                        $id
+ * @property string                     $name
+ * @property int                        $user_id
+ * @property Carbon|null                $created_at
+ * @property Carbon|null                $updated_at
+ * @property string|null                $deleted_at
  * @method static Builder|Portfolio whereCreatedAt($value)
  * @method static Builder|Portfolio whereDeletedAt($value)
  * @method static Builder|Portfolio whereId($value)
  * @method static Builder|Portfolio whereName($value)
  * @method static Builder|Portfolio whereUpdatedAt($value)
  * @method static Builder|Portfolio whereUserId($value)
- * @property-read Collection|Trade[] $trades
- * @property-read int|null                                         $trades_count
- * @property-read User                                             $user
+ * @property-read Collection|Position[] $trades
+ * @property-read int|null              $trades_count
+ * @property-read User                  $user
  */
 class Portfolio extends Model
 {
@@ -45,12 +45,14 @@ class Portfolio extends Model
     {
         static::addGlobalScope(new UserScope());
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
+
     public function trades(): HasMany
     {
-        return $this->hasMany(Trade::class);
+        return $this->hasMany(Position::class);
     }
 }
