@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Trade;
+use App\Models\Position;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TradesFactory extends Factory
+class PositionFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Trade::class;
+    protected $model = Position::class;
 
     /**
      * Define the model's default state.

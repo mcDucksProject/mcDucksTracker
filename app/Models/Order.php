@@ -3,42 +3,39 @@
 namespace App\Models;
 
 use App\Http\Scopes\UserScope;
-use Database\Factories\OrderFactory;
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
+
 
 /**
  * App\Models\Order
  *
- * @method static OrderFactory factory(...$parameters)
- * @method static Builder|Order newModelQuery()
- * @method static Builder|Order newQuery()
- * @method static Builder|Order query()
- * @mixin Eloquent
- * @property int                    $id
- * @property int                    $user_id
- * @property int                    $trade_id
- * @property float                  $quantity
- * @property float                  $price
- * @property string                 $date
- * @property Carbon|null            $created_at
- * @property Carbon|null            $updated_at
- * @property string|null            $deleted_at
- * @method static Builder|Order whereCreatedAt($value)
- * @method static Builder|Order whereDate($value)
- * @method static Builder|Order whereDeletedAt($value)
- * @method static Builder|Order whereId($value)
- * @method static Builder|Order wherePrice($value)
- * @method static Builder|Order whereQuantity($value)
- * @method static Builder|Order whereTradeId($value)
- * @method static Builder|Order whereUpdatedAt($value)
- * @method static Builder|Order whereUserId($value)
- * @property-read \App\Models\Trade $trade
- * @property-read \App\Models\User  $user
+ * @property int $id
+ * @property int $user_id
+ * @property int $position_id
+ * @property float $quantity
+ * @property float $price
+ * @property string $date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \App\Models\Position $position
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\OrderFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePositionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @mixin \Eloquent
  */
 class Order extends Model
 {
@@ -54,8 +51,8 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function trade(): BelongsTo
+    public function position(): BelongsTo
     {
-        return $this->belongsTo(Trade::class);
+        return $this->belongsTo(Position::class);
     }
 }

@@ -41,15 +41,14 @@ class PortfolioController
         try {
             $portfolio = $this->portfolioService->update(
                 $request->get('id'),
-                $request->get('name'),
-                Auth::id());
+                $request->get('name'));
         } catch (SaveException | ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return new JsonResponse($portfolio, Response::HTTP_OK);
     }
 
-    function getPortfolio(int $id): JsonResponse
+    function getById(int $id): JsonResponse
     {
         try {
             $portfolio = $this->portfolioService->getById($id);
@@ -57,16 +56,16 @@ class PortfolioController
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
 
-        return new JsonResponse($portfolio, Response::HTTP_FOUND);
+        return new JsonResponse($portfolio, Response::HTTP_OK);
     }
 
-    function getUserPortfolios(): JsonResponse
+    function getByUser(): JsonResponse
     {
         try {
             $portfolios = $this->portfolioService->getByUserId(Auth::id());
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
-        return new JsonResponse($portfolios, Response::HTTP_FOUND);
+        return new JsonResponse($portfolios, Response::HTTP_OK);
     }
 }
