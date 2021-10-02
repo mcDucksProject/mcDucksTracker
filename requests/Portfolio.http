@@ -1,6 +1,6 @@
 POST http://localhost:80/api/portfolio
 Content-Type: application/json
-Authorization: Bearer 10|597lulobSm1xrq57e7yyfYn55ASIshKOMatgTPHj
+Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
@@ -10,19 +10,19 @@ Accept: application/json
 ###
 GET http://localhost:80/api/portfolio/2
 Content-Type: application/json
-Authorization: Bearer 10|597lulobSm1xrq57e7yyfYn55ASIshKOMatgTPHj
+Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 GET http://localhost:80/api/portfolio/user
 Content-Type: application/json
-Authorization: Bearer 10|597lulobSm1xrq57e7yyfYn55ASIshKOMatgTPHj
+Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 PUT http://localhost:80/api/portfolio
 Content-Type: application/json
-Authorization: Bearer 10|597lulobSm1xrq57e7yyfYn55ASIshKOMatgTPHj
+Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
