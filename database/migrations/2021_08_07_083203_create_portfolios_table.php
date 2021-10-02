@@ -17,6 +17,7 @@ class CreatePortfoliosTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('user_id')->constrained();
+            $table->string('exchange');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -12,10 +12,10 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Ticker
  *
- * @property int $id
- * @property string $pair
- * @property float $price
- * @property string $date
+ * @property int         $id
+ * @property string      $pair
+ * @property float       $price
+ * @property string      $date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static TickerFactory factory(...$parameters)
