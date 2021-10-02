@@ -20,20 +20,20 @@ use Laravel\Sanctum\HasApiTokens;
  * App\Models\User
  *
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
- * @property-read int|null                                                                        $notifications_count
+ * @property-read int|null                                              $notifications_count
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
  * @mixin Eloquent
- * @property int                                                                                  $id
- * @property string                                                                               $name
- * @property string                                                                               $email
- * @property Carbon|null                                                                          $email_verified_at
- * @property string $password
- * @property string|null $remember_token
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                                                        $id
+ * @property string                                                     $name
+ * @property string                                                     $email
+ * @property Carbon|null                                                $email_verified_at
+ * @property string                                                     $password
+ * @property string|null                                                $remember_token
+ * @property Carbon|null                                                $created_at
+ * @property Carbon|null                                                $updated_at
  * @method static Builder|User whereCreatedAt($value)
  * @method static Builder|User whereEmail($value)
  * @method static Builder|User whereEmailVerifiedAt($value)
@@ -42,18 +42,18 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static Builder|User wherePassword($value)
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
- * @property-read Collection|\App\Models\Portfolio[] $portfolios
- * @property-read int|null $portfolios_count
- * @property string|null $two_factor_secret
- * @property string|null $two_factor_recovery_codes
- * @property-read Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
- * @property-read int|null $tokens_count
+ * @property-read Collection|\App\Models\Portfolio[]                    $portfolios
+ * @property-read int|null                                              $portfolios_count
+ * @property string|null                                                $two_factor_secret
+ * @property string|null                                                $two_factor_recovery_codes
+ * @property-read Collection|\Laravel\Sanctum\PersonalAccessToken[]     $tokens
+ * @property-read int|null                                              $tokens_count
  * @method static Builder|User whereTwoFactorRecoveryCodes($value)
  * @method static Builder|User whereTwoFactorSecret($value)
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens,HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -84,6 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public function portfolios(): HasMany
     {
         return $this->hasMany(Portfolio::class);

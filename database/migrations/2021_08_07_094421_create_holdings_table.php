@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePositionsTable extends Migration
+class CreateHoldingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreatePositionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('positions', function (Blueprint $table) {
+        Schema::create('holdings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('portfolio_id')->constrained();
-            $table->string('token');
-            $table->string('pair');
+            $table->string('symbol');
             $table->double('expected_sell');
+            $table->enum('expected_sell_symbol', ['btc', 'usdt']);
             $table->enum('status', ['open', 'closed']);
             $table->timestamps();
             $table->softDeletes();

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Position;
+use App\Models\Holding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PositionFactory extends Factory
@@ -12,7 +12,7 @@ class PositionFactory extends Factory
      *
      * @var string
      */
-    protected $model = Position::class;
+    protected $model = Holding::class;
 
     /**
      * Define the model's default state.

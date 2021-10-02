@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Exceptions\SaveException;
-use App\Models\Position;
+use App\Models\Holding;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -13,9 +13,9 @@ class PositionService
     /**
      * @throws SaveException
      */
-    function create($portfolioId, $token, $pair, $expectedSell): Position
+    function create($portfolioId, $token, $pair, $expectedSell): Holding
     {
-        $position = new Position([
+        $position = new Holding([
             'portfolio_id' => $portfolioId,
             'token' => $token,
             'pair' => $pair,
@@ -34,10 +34,10 @@ class PositionService
     /**
      * @throws SaveException
      */
-    function update($positionId, $expectedSell): Position
+    function update($positionId, $expectedSell): Holding
     {
         try {
-            $position = Position::findOrFail($positionId);
+            $position = Holding::findOrFail($positionId);
             $position->expected_sell = $expectedSell;
             $position->saveOrFail();
         } catch (\Throwable $e) {
@@ -49,13 +49,13 @@ class PositionService
     /**
      * @throws ModelNotFoundException
      */
-    function getById($positionId): Position
+    function getById($positionId): Holding
     {
-        return Position::findOrFail($positionId);
+        return Holding::findOrFail($positionId);
     }
 
     function getByPortfolio($portfolioId): Collection
     {
-        return Position::wherePortfolioId($portfolioId)->get();
+        return Holding::wherePortfolioId($portfolioId)->get();
     }
 }
