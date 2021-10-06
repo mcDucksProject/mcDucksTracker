@@ -22,10 +22,11 @@ class PortfolioController
     function create(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'exchange' => 'required'
         ]);
         try {
-            $portfolio = $this->portfolioService->create($request->get('name'), Auth::id());
+            $portfolio = $this->portfolioService->create($request->get('name'), Auth::id(), $request->get('exchange'));
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

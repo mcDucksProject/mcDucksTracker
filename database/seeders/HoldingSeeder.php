@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class PositionsSeeder extends Seeder
+class HoldingSeeder extends Seeder
 {
     /**
      * Run the database seeds.

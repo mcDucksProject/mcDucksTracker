@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
+use App\Models\Holding;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -13,19 +14,20 @@ class OrderService
     /**
      * @throws SaveException
      */
-    function create($positionId, $userId, $quantity, $price, $date): Order
+    function create($holdingId, $userId, $quantity, $priceBTC, $priceUSDT, $date): Order
     {
-        $order = new Order([
-            'position_id' => $positionId,
-            'user_id' => $userId,
-            'quantity' => $quantity,
-            'price' => $price,
-            'date' => $date
-        ]);
         try {
+            $order = new Order();
+            $order->holding_id = Holding::findOrFail($holdingId)->id;
+            $order->user_id = $userId;
+            $order->quantity = $quantity;
+            $order->price_btc = $priceBTC;
+            $order->price_usdt = $priceUSDT;
+            $order->date = $date;
             $order->saveOrFail();
-        } catch (\Throwable $e) {
-            throw new SaveException();
+            return $order;
+        } catch (\Throwable | ModelNotFoundException $e) {
+            throw new SaveException($e->getMessage());
         }
     }
 
@@ -75,8 +77,8 @@ class OrderService
         return Order::findOrFail($orderId);
     }
 
-    function getByPosition($positionId): Collection
+    function getByHolding($holdingId): Collection
     {
-        return Order::wherePositionId($positionId)->get();
+        return Order::whereHoldingId($holdingId)->get();
     }
 }

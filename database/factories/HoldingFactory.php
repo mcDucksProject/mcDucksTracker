@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Holding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PositionFactory extends Factory
+class HoldingFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

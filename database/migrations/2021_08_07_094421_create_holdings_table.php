@@ -17,7 +17,7 @@ class CreateHoldingsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('portfolio_id')->constrained();
-            $table->string('symbol');
+            $table->string('symbol')->nullable(false);
             $table->double('expected_sell');
             $table->enum('expected_sell_symbol', ['btc', 'usdt']);
             $table->enum('status', ['open', 'closed']);

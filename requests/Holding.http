@@ -1,32 +1,28 @@
-POST http://localhost:80/api/portfolio
+POST http://localhost:80/api/holding
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "Another user",
-    "exchange": "Binance"
+    "portfolio_id": 2,
+    "symbol": "ANKR",
+    "expected_sell": 25
 }
 
 ###
-GET http://localhost:80/api/portfolio/2
+GET http://localhost:80/api/holding
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-GET http://localhost:80/api/portfolio
+GET http://localhost:80/api/holding/4
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-PUT http://localhost:80/api/portfolio
+GET http://localhost:80/api/holding/portfolio/2
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
-
-{
-    "id": 2,
-    "name": "updated name2"
-}
