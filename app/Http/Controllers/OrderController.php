@@ -22,17 +22,19 @@ class OrderController extends Controller
     function create(Request $request): JsonResponse
     {
         $request->validate([
-            'position_id' => 'required',
+            'holding_id' => 'required',
             'quantity' => 'required',
-            'price' => 'required',
+            'price_btc' => 'required',
+            'price_usdt' => 'required',
             'date' => 'required'
         ]);
         try {
             $order = $this->orderService->create(
-                $request->get('position_id'),
+                $request->get('holding_id'),
                 \Auth::id(),
                 $request->get('quantity'),
-                $request->get('price'),
+                $request->get('price_btc'),
+                $request->get('price_usdt'),
                 $request->get('date')
             );
         } catch (SaveException $e) {
@@ -80,10 +82,10 @@ class OrderController extends Controller
         return new JsonResponse($order, Response::HTTP_OK);
     }
 
-    function getByPosition(int $positionId): JsonResponse
+    function getByHolding(int $holdingId): JsonResponse
     {
         try {
-            $orders = $this->orderService->getByPosition($positionId);
+            $orders = $this->orderService->getByHolding($holdingId);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }

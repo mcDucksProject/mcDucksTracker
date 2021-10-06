@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int          $position_id
  * @property float        $quantity
  * @property float        $price
- * @property string       $date
+ * @property Carbon|null  $date
  * @property Carbon|null  $created_at
  * @property Carbon|null  $updated_at
  * @property string|null  $deleted_at
@@ -51,6 +51,9 @@ use Illuminate\Support\Carbon;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $dates = ['date', 'created_at', 'udpated_at'];
+    protected $dateFormat = "Y-m-d H:i";
 
     public static function booted()
     {

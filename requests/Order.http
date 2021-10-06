@@ -1,0 +1,24 @@
+POST http://localhost:80/api/order
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "holding_id": 4,
+    "quantity": 61,
+    "price_btc": 0.00045010,
+    "price_usdt": 19.68,
+    "date": "2020-10-01 15:22"
+}
+
+###
+GET http://localhost:80/api/order
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/order/holding/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

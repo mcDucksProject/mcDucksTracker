@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Http\Scopes\UserScope;
-use Database\Factories\PositionFactory;
+use Database\Factories\HoldingFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,7 +40,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Holding whereUserId($value)
  * @property-read Portfolio $portfolio
  * @property-read User      $user
- * @method static PositionFactory factory(...$parameters)
+ * @method static HoldingFactory factory(...$parameters)
  * @property string         $symbol
  * @property string         $expected_sell_symbol
  * @method static Builder|Holding whereExpectedSellSymbol($value)
