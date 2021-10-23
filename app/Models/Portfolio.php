@@ -23,22 +23,22 @@ use Illuminate\Support\Carbon;
  * @mixin Eloquent
  * @property int                       $id
  * @property string                    $name
- * @property int                       $user_id
- * @property Carbon|null               $created_at
- * @property Carbon|null               $updated_at
- * @property string|null               $deleted_at
+ * @property int                                    $user_id
+ * @property Carbon|null                            $created_at
+ * @property Carbon|null                            $updated_at
+ * @property string|null                            $deleted_at
  * @method static Builder|Portfolio whereCreatedAt($value)
  * @method static Builder|Portfolio whereDeletedAt($value)
  * @method static Builder|Portfolio whereId($value)
  * @method static Builder|Portfolio whereName($value)
  * @method static Builder|Portfolio whereUpdatedAt($value)
  * @method static Builder|Portfolio whereUserId($value)
- * @property-read Collection|Holding[] $trades
- * @property-read int|null             $trades_count
- * @property-read User                 $user
- * @property string $exchange
- * @property-read Collection|\App\Models\Holding[] $holdings
- * @property-read int|null $holdings_count
+ * @property-read Collection|Position[]             $trades
+ * @property-read int|null                          $trades_count
+ * @property-read User                              $user
+ * @property string                                 $exchange
+ * @property-read Collection|\App\Models\Position[] $holdings
+ * @property-read int|null                          $holdings_count
  * @method static Builder|Portfolio whereExchange($value)
  */
 class Portfolio extends Model
@@ -57,6 +57,6 @@ class Portfolio extends Model
 
     public function holdings(): HasMany
     {
-        return $this->hasMany(Holding::class);
+        return $this->hasMany(Position::class);
     }
 }

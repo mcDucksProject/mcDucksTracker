@@ -14,9 +14,9 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Trade
  *
- * @method static Builder|Holding newModelQuery()
- * @method static Builder|Holding newQuery()
- * @method static Builder|Holding query()
+ * @method static Builder|Position newModelQuery()
+ * @method static Builder|Position newQuery()
+ * @method static Builder|Position query()
  * @mixin Eloquent
  * @property int            $id
  * @property int            $user_id
@@ -28,25 +28,25 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null    $created_at
  * @property Carbon|null    $updated_at
  * @property string|null    $deleted_at
- * @method static Builder|Holding whereCreatedAt($value)
- * @method static Builder|Holding whereDeletedAt($value)
- * @method static Builder|Holding whereExpectedSell($value)
- * @method static Builder|Holding whereId($value)
- * @method static Builder|Holding wherePair($value)
- * @method static Builder|Holding wherePortfolioId($value)
- * @method static Builder|Holding whereStatus($value)
- * @method static Builder|Holding whereToken($value)
- * @method static Builder|Holding whereUpdatedAt($value)
- * @method static Builder|Holding whereUserId($value)
+ * @method static Builder|Position whereCreatedAt($value)
+ * @method static Builder|Position whereDeletedAt($value)
+ * @method static Builder|Position whereExpectedSell($value)
+ * @method static Builder|Position whereId($value)
+ * @method static Builder|Position wherePair($value)
+ * @method static Builder|Position wherePortfolioId($value)
+ * @method static Builder|Position whereStatus($value)
+ * @method static Builder|Position whereToken($value)
+ * @method static Builder|Position whereUpdatedAt($value)
+ * @method static Builder|Position whereUserId($value)
  * @property-read Portfolio $portfolio
  * @property-read User      $user
  * @method static HoldingFactory factory(...$parameters)
  * @property string         $symbol
  * @property string         $expected_sell_symbol
- * @method static Builder|Holding whereExpectedSellSymbol($value)
- * @method static Builder|Holding whereSymbol($value)
+ * @method static Builder|Position whereExpectedSellSymbol($value)
+ * @method static Builder|Position whereSymbol($value)
  */
-class Holding extends Model
+class Position extends Model
 {
     use HasFactory;
 

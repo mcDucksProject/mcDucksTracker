@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
-use App\Models\Holding;
+use App\Models\Position;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,7 +18,7 @@ class OrderService
     {
         try {
             $order = new Order();
-            $order->holding_id = Holding::findOrFail($holdingId)->id;
+            $order->holding_id = Position::findOrFail($holdingId)->id;
             $order->user_id = $userId;
             $order->quantity = $quantity;
             $order->price_btc = $priceBTC;

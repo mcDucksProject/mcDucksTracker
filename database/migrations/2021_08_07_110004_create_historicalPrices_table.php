@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Pair;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTickersTable extends Migration
+class CreateHistoricalPricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,9 @@ class CreateTickersTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickers', function (Blueprint $table) {
+        Schema::create('historical_prices', function (Blueprint $table) {
             $table->id();
-            $table->string('pair');
+            $table->foreignIdFor(Pair::class);
             $table->double('price');
             $table->timestamp('date');
             $table->timestamps();
@@ -29,6 +30,6 @@ class CreateTickersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickers');
+        Schema::dropIfExists('historical_prices');
     }
 }
