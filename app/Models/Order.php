@@ -15,17 +15,17 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Order
  *
- * @property int          $id
- * @property int          $user_id
- * @property int          $position_id
- * @property float        $quantity
- * @property float        $price
- * @property Carbon|null  $date
- * @property Carbon|null  $created_at
- * @property Carbon|null  $updated_at
- * @property string|null  $deleted_at
- * @property-read Holding $position
- * @property-read User    $user
+ * @property int           $id
+ * @property int           $user_id
+ * @property int           $position_id
+ * @property float         $quantity
+ * @property float         $price
+ * @property Carbon|null   $date
+ * @property Carbon|null   $created_at
+ * @property Carbon|null   $updated_at
+ * @property string|null   $deleted_at
+ * @property-read Position $position
+ * @property-read User     $user
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -40,10 +40,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
  * @mixin Eloquent
- * @property int          $holding_id
- * @property float        $price_btc
- * @property float        $price_usdt
- * @property-read Holding $holding
+ * @property int           $holding_id
+ * @property float         $price_btc
+ * @property float         $price_usdt
+ * @property-read Position $holding
  * @method static Builder|Order whereHoldingId($value)
  * @method static Builder|Order wherePriceBtc($value)
  * @method static Builder|Order wherePriceUsdt($value)
@@ -67,6 +67,6 @@ class Order extends Model
 
     public function holding(): BelongsTo
     {
-        return $this->belongsTo(Holding::class);
+        return $this->belongsTo(Position::class);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\SaveException;
-use App\Http\Services\HoldingService;
+use App\Http\Services\PositionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HoldingController extends Controller
 {
-    private HoldingService $holdingService;
+    private PositionService $holdingService;
 
-    public function __construct(HoldingService $holdingService)
+    public function __construct(PositionService $holdingService)
     {
         $this->holdingService = $holdingService;
     }

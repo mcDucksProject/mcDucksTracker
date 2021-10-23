@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Pair;
+use App\Models\Token;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHoldingsTable extends Migration
+class CreatePositionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +15,18 @@ class CreateHoldingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('holdings', function (Blueprint $table) {
+        Schema::create('tokens', function(Blueprint $table){
+           $table->id();
+           $table->string('name');
+           $table->timestamps();
+        });
+        Schema::create('pairs', function(Blueprint $table){
+           $table->id();
+           $table->foreignIdFor(Token::class,'quote_id');
+           $table->foreignIdFor(Token::class,'base_id');
+           $table->timestamps();
+        });
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('portfolio_id')->constrained();
