@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Http\Scopes\UserScope;
-use Database\Factories\PortfolioFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,30 +15,28 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Portfolio
  *
- * @method static PortfolioFactory factory(...$parameters)
- * @method static Builder|Portfolio newModelQuery()
- * @method static Builder|Portfolio newQuery()
- * @method static Builder|Portfolio query()
- * @mixin Eloquent
- * @property int                       $id
- * @property string                    $name
+ * @property int                                    $id
+ * @property string                                 $name
  * @property int                                    $user_id
+ * @property int                                    $exchange_id
  * @property Carbon|null                            $created_at
  * @property Carbon|null                            $updated_at
  * @property string|null                            $deleted_at
+ * @property-read Collection|\App\Models\Position[] $holdings
+ * @property-read int|null                          $holdings_count
+ * @property-read \App\Models\User                  $user
+ * @method static \Database\Factories\PortfolioFactory factory(...$parameters)
+ * @method static Builder|Portfolio newModelQuery()
+ * @method static Builder|Portfolio newQuery()
+ * @method static Builder|Portfolio query()
  * @method static Builder|Portfolio whereCreatedAt($value)
  * @method static Builder|Portfolio whereDeletedAt($value)
+ * @method static Builder|Portfolio whereExchangeId($value)
  * @method static Builder|Portfolio whereId($value)
  * @method static Builder|Portfolio whereName($value)
  * @method static Builder|Portfolio whereUpdatedAt($value)
  * @method static Builder|Portfolio whereUserId($value)
- * @property-read Collection|Position[]             $trades
- * @property-read int|null                          $trades_count
- * @property-read User                              $user
- * @property string                                 $exchange
- * @property-read Collection|\App\Models\Position[] $holdings
- * @property-read int|null                          $holdings_count
- * @method static Builder|Portfolio whereExchange($value)
+ * @mixin Eloquent
  */
 class Portfolio extends Model
 {
@@ -55,7 +52,7 @@ class Portfolio extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function holdings(): HasMany
+    public function positions(): HasMany
     {
         return $this->hasMany(Position::class);
     }
