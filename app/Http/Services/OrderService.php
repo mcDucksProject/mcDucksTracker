@@ -34,21 +34,26 @@ class OrderService
     /**
      * @throws SaveException
      */
-    function update($orderId, $quantity = ""): Order
-    {
+    function update(
+        $orderId,
+        $quantity = "",
+        $status = "",
+        $type = "",
+        $date = ""
+    ): Order {
         try {
             $order = Order::findOrFail($orderId);
             if ($quantity != "") {
                 $order->quantity = $quantity;
             }
-            if ($price != "") {
-                $order->price = $price;
-            }
             if ($date != "") {
                 $order->date = $date;
             }
             if ($status != "") {
-
+                $order->status = $status;
+            }
+            if ($type != "") {
+                $order->type = $type;
             }
             $order->saveOrFail();
 
@@ -80,8 +85,8 @@ class OrderService
         return Order::findOrFail($orderId);
     }
 
-    function getByHolding($holdingId): Collection
+    function getByPositionId($holdingId): Collection
     {
-        return Order::whereHoldingId($holdingId)->get();
+        return Order::wherePositionId($holdingId)->get();
     }
 }

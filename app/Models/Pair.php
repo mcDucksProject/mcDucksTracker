@@ -2,27 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Pair
  *
- * @property int $id
- * @property int $quote_id
- * @property int $base_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Pair newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Pair newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Pair query()
- * @method static \Illuminate\Database\Eloquent\Builder|Pair whereBaseId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pair whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pair whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pair whereQuoteId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Pair whereUpdatedAt($value)
+ * @property int         $id
+ * @property int         $quote_id
+ * @property int         $base_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Pair newModelQuery()
+ * @method static Builder|Pair newQuery()
+ * @method static Builder|Pair query()
+ * @method static Builder|Pair whereBaseId($value)
+ * @method static Builder|Pair whereCreatedAt($value)
+ * @method static Builder|Pair whereId($value)
+ * @method static Builder|Pair whereQuoteId($value)
+ * @method static Builder|Pair whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Pair extends Model
 {
+    function base(): BelongsTo
+    {
+        return $this->belongsTo(Token::class, 'base_id');
+    }
 
+    function quote(): BelongsTo
+    {
+        return $this->belongsTo(Token::class, 'quote_id');
+    }
 }

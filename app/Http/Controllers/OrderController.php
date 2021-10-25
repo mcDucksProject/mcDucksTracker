@@ -30,10 +30,12 @@ class OrderController extends Controller
         ]);
         try {
             $order = $this->orderService->create(
-                $request->get('holding_id'),
                 \Auth::id(),
-                $request->get('quantity'),
-                $request->get('date')
+                $params['position_id'],
+                $params['quantity'],
+                $params['status'],
+                $params['type'],
+                $params['date']
             );
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -43,15 +45,20 @@ class OrderController extends Controller
 
     function update(Request $request): JsonResponse
     {
-        $request->validate([
-            'order_id' => 'required'
+        $params = $request->validate([
+            'order_id' => 'required',
+            'quantity' => '',
+            'date' => '',
+            'status' => '',
+            'type' => ''
         ]);
         try {
             $order = $this->orderService->update(
-                $request->get('order_id'),
-                $request->get('quantity') ?? '',
-                $request->get('price') ?? '',
-                $request->get('date') ?? ''
+                $params['order_id'],
+                $params['quantity'] ?? "",
+                $params['status'] ?? "",
+                $params['type'] ?? "",
+                $params['date'] ?? ""
             );
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -66,7 +73,7 @@ class OrderController extends Controller
         } catch (DeleteException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return new JsonResponse('', Response::HTTP_NO_CONTENT);
+        return new JsonResponse("", Response::HTTP_NO_CONTENT);
     }
 
 
@@ -75,17 +82,17 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->getById($id);
         } catch (ModelNotFoundException $e) {
-            return new JsonResponse('', Response::HTTP_NO_CONTENT);
+            return new JsonResponse("", Response::HTTP_NO_CONTENT);
         }
         return new JsonResponse($order, Response::HTTP_OK);
     }
 
-    function getByHolding(int $holdingId): JsonResponse
+    function getByHolding(int $positionId): JsonResponse
     {
         try {
-            $orders = $this->orderService->getByHolding($holdingId);
+            $orders = $this->orderService->getByPositionId($positionId);
         } catch (ModelNotFoundException $e) {
-            return new JsonResponse('', Response::HTTP_NO_CONTENT);
+            return new JsonResponse("", Response::HTTP_NO_CONTENT);
         }
         return new JsonResponse($orders, Response::HTTP_OK);
     }
