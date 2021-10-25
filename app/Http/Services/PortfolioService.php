@@ -12,16 +12,20 @@ class PortfolioService
     /**
      * @throws SaveException
      */
-    function create($name, $userId, $exchange): Portfolio
+    function create($name, $userId, $exchangeId): Portfolio
     {
         $portfolio = new Portfolio();
         $portfolio->user_id = $userId;
+        $portfolio->exchange_id = $exchangeId;
         $portfolio->name = $name;
-        $portfolio->exchange = $exchange;
-        if ($portfolio->save()) {
-            return $portfolio;
+        try {
+            $portfolio->saveOrFail();
+
+        } catch (\Throwable $e) {
+            throw new SaveException($e->getMessage());
         }
-        throw new SaveException();
+
+        return $portfolio;
     }
 
     /**
@@ -48,6 +52,11 @@ class PortfolioService
     function getByUserId($userId): Collection
     {
         return Portfolio::whereUserId($userId)->get();
+    }
+
+    function getByExchange($exchangeId): Collection
+    {
+        return Portfolio::whereExchangeId($exchangeId)->get();
     }
 
     function delete($portfolioId): ?bool

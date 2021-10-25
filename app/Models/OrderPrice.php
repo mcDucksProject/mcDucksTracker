@@ -24,6 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|OrderPrice wherePrice($value)
  * @method static Builder|OrderPrice whereUserId($value)
  * @mixin Eloquent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static Builder|OrderPrice whereCreatedAt($value)
+ * @method static Builder|OrderPrice whereDeletedAt($value)
+ * @method static Builder|OrderPrice whereUpdatedAt($value)
  */
 class OrderPrice extends Model
 {

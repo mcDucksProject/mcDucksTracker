@@ -31,8 +31,8 @@ class CreateInitialTables extends Migration
         });
         Schema::create('pairs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Token::class, 'quote_id');
-            $table->foreignIdFor(Token::class, 'base_id');
+            $table->foreignIdFor(Token::class, 'quote_id')->constrained('tokens');
+            $table->foreignIdFor(Token::class, 'base_id')->constrained('tokens');
             $table->timestamps();
         });
         Schema::create('portfolios', function (Blueprint $table) {
@@ -69,6 +69,8 @@ class CreateInitialTables extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Pair::class)->constrained();
             $table->double('price');
+            $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('historical_prices', function (Blueprint $table) {
             $table->id();

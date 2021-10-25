@@ -4,8 +4,8 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "Another user",
-    "exchange": "Binance"
+    "name": "Test",
+    "exchange_id": "1"
 }
 
 ###

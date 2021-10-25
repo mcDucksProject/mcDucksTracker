@@ -37,6 +37,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Portfolio whereUpdatedAt($value)
  * @method static Builder|Portfolio whereUserId($value)
  * @mixin Eloquent
+ * @property-read Collection|\App\Models\Position[] $positions
+ * @property-read int|null $positions_count
  */
 class Portfolio extends Model
 {
