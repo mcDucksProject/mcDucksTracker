@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\SaveException;
 use App\Http\Services\PortfolioService;
+use App\Models\Exchange;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,12 +22,22 @@ class PortfolioController
 
     function create(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
             'name' => 'required',
-            'exchange' => 'required'
+            'exchange' => 'required_if:exchange_id,null',
+            'exchange_id' => 'numeric|required_if:exchange,null'
         ]);
+        if (key_exists('exchange', $params)) {
+            $exchange = Exchange::whereName($params['exchange'])->firstOrFail();
+            $exchange_id = $exchange->id;
+        } else {
+            $exchange_id = $params['exchange_id'];
+        }
         try {
-            $portfolio = $this->portfolioService->create($request->get('name'), Auth::id(), $request->get('exchange'));
+            $portfolio = $this->portfolioService->create(
+                $params['name'],
+                Auth::id(),
+                $exchange_id);
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -35,14 +46,14 @@ class PortfolioController
 
     function update(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
             'id' => 'bail|required',
             'name' => 'required',
         ]);
         try {
             $portfolio = $this->portfolioService->update(
-                $request->get('id'),
-                $request->get('name'));
+                $params['id'],
+                $params['name']);
         } catch (SaveException | ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -64,6 +75,16 @@ class PortfolioController
     {
         try {
             $portfolios = $this->portfolioService->getByUserId(Auth::id());
+        } catch (ModelNotFoundException $e) {
+            return new JsonResponse('', Response::HTTP_NO_CONTENT);
+        }
+        return new JsonResponse($portfolios, Response::HTTP_OK);
+    }
+
+    function getByExchange(int $exchange_id): JsonResponse
+    {
+        try {
+            $portfolios = $this->portfolioService->getByExchange($exchange_id);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }

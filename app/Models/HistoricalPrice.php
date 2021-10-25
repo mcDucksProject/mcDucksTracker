@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HistoricalPrice wherePrice($value)
  * @method static Builder|HistoricalPrice whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read \App\Models\Pair $pair
  */
 class HistoricalPrice extends Model
 {

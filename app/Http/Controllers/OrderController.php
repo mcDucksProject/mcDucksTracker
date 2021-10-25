@@ -21,20 +21,18 @@ class OrderController extends Controller
 
     function create(Request $request): JsonResponse
     {
-        $request->validate([
-            'holding_id' => 'required',
+        $params = $request->validate([
+            'position_id' => 'required',
             'quantity' => 'required',
-            'price_btc' => 'required',
-            'price_usdt' => 'required',
-            'date' => 'required'
+            'date' => 'required',
+            'status' => 'in:filled,open',
+            'type' => 'in:buy,sell'
         ]);
         try {
             $order = $this->orderService->create(
                 $request->get('holding_id'),
                 \Auth::id(),
                 $request->get('quantity'),
-                $request->get('price_btc'),
-                $request->get('price_usdt'),
                 $request->get('date')
             );
         } catch (SaveException $e) {

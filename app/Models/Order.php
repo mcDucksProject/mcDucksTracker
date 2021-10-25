@@ -37,6 +37,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
  * @mixin Eloquent
+ * @property string $status
+ * @property string $type
+ * @property-read \App\Models\Position $position
+ * @method static Builder|Order whereStatus($value)
+ * @method static Builder|Order whereType($value)
  */
 class Order extends Model
 {

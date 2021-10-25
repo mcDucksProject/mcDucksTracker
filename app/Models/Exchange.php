@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Exchange whereId($value)
  * @method static Builder|Exchange whereName($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|Exchange[] $portfolios
+ * @property-read int|null $portfolios_count
  */
 class Exchange extends Model
 {
