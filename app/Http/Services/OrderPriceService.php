@@ -2,9 +2,11 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Models\OrderPrice;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderPriceService
 {
@@ -24,6 +26,18 @@ class OrderPriceService
             throw new SaveException();
         }
         return $orderPrice;
+    }
+
+    /**
+     * @throws DeleteException
+     */
+    function delete($orderPriceId)
+    {
+        try {
+            OrderPrice::findOrFail($orderPriceId)->deleteOrFail();
+        } catch (ModelNotFoundException | \Throwable $e) {
+            throw new DeleteException();
+        }
     }
 
     function getByOrder($orderId): Collection

@@ -6,6 +6,7 @@ use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
 use App\Models\Token;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TokenService
 {
@@ -52,5 +53,21 @@ class TokenService
         } catch (\Throwable $e) {
             throw new DeleteException();
         }
+    }
+
+    /**
+     * @throws ModelNotFoundException
+     */
+    function getById($tokenId): Token
+    {
+        return Token::findOrFail($tokenId);
+    }
+
+    /**
+     * @throws ModelNotFoundException
+     */
+    function getByName($name): Token
+    {
+        return Token::whereName($name)->firstOrFail();
     }
 }

@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\HoldingController;
+use App\Http\Controllers\ExchangeController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderPriceController;
+use App\Http\Controllers\PairController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,30 +21,68 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/sanctum/token', [TokenController::class, 'generateApiToken']);
+Route::post('/sanctum/token', [LoginController::class, 'generateApiToken']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    Route::post('/portfolio', [PortfolioController::class, 'create']);
-    Route::put('/portfolio', [PortfolioController::class, 'update']);
-    Route::get('/portfolio', [PortfolioController::class, 'getByUser']);
-    Route::get('/portfolio/{id}', [PortfolioController::class, 'getById']);
+    Route::prefix('exchange')->group(function () {
+        Route::post('', [ExchangeController::class, 'create']);
+        Route::put('', [ExchangeController::class, 'update']);
+        Route::delete('/{id}', [ExchangeController::class, 'delete']);
+        Route::get('/{id}/portfolios', [PortfolioController::class, 'getByExchange']);
+    });
 
-    Route::post('/holding', [HoldingController::class, 'create']);
-    Route::put('/holding', [HoldingController::class, 'update']);
-    Route::get('/holding/portfolio/{id}', [HoldingController::class, 'getByPortfolio']);
-    Route::get('/holding', [HoldingController::class, 'getByUser']);
-    Route::get('/holding/{id}', [HoldingController::class, 'getById']);
+    Route::prefix('token')->group(function () {
+        Route::post('', [TokenController::class, 'create']);
+        Route::put('', [TokenController::class, 'update']);
+        Route::delete('/{id}', [TokenController::class, 'delete']);
+        Route::get('/{id}', [TokenController::class, 'getById']);
+        Route::get('', [TokenController::class, 'getByName']);
 
-    Route::post('/order', [OrderController::class, 'create']);
-    Route::put('/order', [OrderController::class, 'update']);
-    Route::get('/order', [OrderController::class, 'getByUser']);
-    Route::get('/order/holding/{id}', [OrderController::class, 'getByHolding']);
+        Route::prefix('/{baseId}/pair/{quoteId}')->group(function () {
+            Route::post('', [PairController::class, 'create']);
+            Route::delete('', [PairController::class, 'delete']);
+            Route::get('', [PairController::class, 'getByBaseIdAndQuoteId']);
+        });
+        Route::prefix('/{id}/pairs')->group(function () {
+            Route::post('', [PairController::class, 'getByBaseId']);
+            Route::post('/as-quote', [PairController::class, 'getByQuoteId']);
+        });
+    });
 
-    Route::get('/order/{id}', [OrderController::class, 'getById']);
-    Route::delete('/order/{id}', [OrderController::class, 'delete']);
+    Route::prefix('portfolio')->group(function () {
+        Route::post('', [PortfolioController::class, 'create']);
+        Route::put('', [PortfolioController::class, 'update']);
+        Route::delete('/{id}', [PortfolioController::class, 'delete']);
+        Route::get('/{id}', [PortfolioController::class, 'getById']);
+        Route::get('', [PortfolioController::class, 'getByUser']);
+        Route::get('/{id}/positions', [PositionController::class, 'getByPortfolio']);
+    });
+
+    Route::prefix('position')->group(function () {
+        Route::post('', [PositionController::class, 'create']);
+        Route::put('', [PositionController::class, 'update']);
+        Route::get('/{id}', [PositionController::class, 'getById']);
+        Route::get('', [PositionController::class, 'getByUser']);
+        Route::get('/{id}/orders', [OrderController::class, 'getByPosition']);
+    });
+
+    Route::prefix('order')->group(function () {
+        Route::post('', [OrderController::class, 'create']);
+        Route::put('', [OrderController::class, 'update']);
+        Route::delete('/{id}', [OrderController::class, 'delete']);
+        Route::get('/{id}', [OrderController::class, 'getById']);
+        Route::get('/{id}/prices', [OrderPriceController::class, 'getByOrder']);
+        Route::prefix('/{id}/price')->group(function () {
+            Route::post('', [OrderPriceController::class, 'create']);
+            Route::put('', [OrderPriceController::class, 'update']);
+            Route::delete('/{id}', [OrderPriceController::class, 'delete']);
+        });
+    });
+
 });
 

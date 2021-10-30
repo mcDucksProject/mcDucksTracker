@@ -3,58 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\SaveException;
+use App\Exceptions\UpdateException;
 use App\Http\Services\PositionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HoldingController extends Controller
+class PositionController extends Controller
 {
-    private PositionService $holdingService;
+    private PositionService $positionService;
 
     public function __construct(PositionService $holdingService)
     {
-        $this->holdingService = $holdingService;
+        $this->positionService = $holdingService;
     }
 
     function create(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
+            'token_id' => 'required',
             'portfolio_id' => 'required',
-            'symbol' => 'required',
-            'expected_sell' => 'required'
+            'status' => 'in:open,closed'
         ]);
         try {
-            $holding = $this->holdingService->create(
-                $request->get('portfolio_id'),
-                $request->get('symbol'),
-                $request->get('expected_sell')
+            $position = $this->positionService->create(
+                $params['token_id'],
+                \Auth::id(),
+                $params['portfolio_id'],
+                $params['status']
             );
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return new JsonResponse($holding);
+        return new JsonResponse($position);
     }
 
     function update(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
             'id' => 'required',
-            'expected_sell' => 'required'
+            'status' => 'required'
         ]);
         try {
-            $holding = $this->holdingService->update($request->get('id'), $request->get('expected_sell'));
-        } catch (SaveException | ModelNotFoundException $e) {
+            $position = $this->positionService->update(
+                $params['holding_id'],
+                $request->get('expected_sell'));
+        } catch (UpdateException | ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return new JsonResponse($holding, Response::HTTP_OK);
+        return new JsonResponse($position, Response::HTTP_OK);
     }
 
     function getById(int $id): JsonResponse
     {
         try {
-            $holding = $this->holdingService->getById($id);
+            $holding = $this->positionService->getById($id);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
@@ -64,7 +68,7 @@ class HoldingController extends Controller
     function getByPortfolio(int $portfolioId): JsonResponse
     {
         try {
-            $holdings = $this->holdingService->getByPortfolio($portfolioId);
+            $holdings = $this->positionService->getByPortfolio($portfolioId);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
@@ -74,7 +78,7 @@ class HoldingController extends Controller
     function getByUser(): JsonResponse
     {
         try {
-            $holdings = $this->holdingService->getByUser(\Auth::id());
+            $holdings = $this->positionService->getByUser(\Auth::id());
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }

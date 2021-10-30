@@ -87,7 +87,7 @@ class OrderController extends Controller
         return new JsonResponse($order, Response::HTTP_OK);
     }
 
-    function getByHolding(int $positionId): JsonResponse
+    function getByPosition(int $positionId): JsonResponse
     {
         try {
             $orders = $this->orderService->getByPositionId($positionId);

@@ -44,13 +44,23 @@ class PairService
         return Pair::findOrFail($pairId);
     }
 
-    function getByBase($baseId): Collection
+    function getByBaseId($baseId): Collection
     {
         return Pair::whereBaseId($baseId)->get();
     }
 
-    function getByQuote($quoteId): Collection
+    function getByQuoteId($quoteId): Collection
     {
         return Pair::whereQuoteId($quoteId)->get();
+    }
+
+    /**
+     * @throws ModelNotFoundException
+     */
+    function getByBaseIdAndQuoteId($baseId, $quoteId): Pair
+    {
+        return Pair::where('base_id', '=', $baseId)
+            ->where('quote_id', '=', $quoteId)
+            ->firstOrFail();
     }
 }
