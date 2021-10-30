@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [ExchangeController::class, 'create']);
         Route::put('', [ExchangeController::class, 'update']);
         Route::delete('/{id}', [ExchangeController::class, 'delete']);
+        Route::get('', [ExchangeController::class, 'getAll']);
         Route::get('/{id}/portfolios', [PortfolioController::class, 'getByExchange']);
     });
 
@@ -77,10 +78,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [OrderController::class, 'delete']);
         Route::get('/{id}', [OrderController::class, 'getById']);
         Route::get('/{id}/prices', [OrderPriceController::class, 'getByOrder']);
-        Route::prefix('/{id}/price')->group(function () {
+        Route::prefix('/{orderId}/price')->group(function () {
             Route::post('', [OrderPriceController::class, 'create']);
             Route::put('', [OrderPriceController::class, 'update']);
-            Route::delete('/{id}', [OrderPriceController::class, 'delete']);
+            Route::delete('/{priceId}', [OrderPriceController::class, 'delete']);
         });
     });
 

@@ -1,0 +1,8 @@
+POST http://localhost:80/api/token
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "name": "Binance"
+}

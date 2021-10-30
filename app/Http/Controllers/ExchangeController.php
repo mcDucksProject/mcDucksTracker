@@ -56,8 +56,9 @@ class ExchangeController extends Controller
         return new JsonResponse("", Response::HTTP_NO_CONTENT);
     }
 
-    function get(): JsonResponse
+    function getAll(): JsonResponse
     {
-
+        $exchanges = $this->exchangeService->getAll();
+        return new JsonResponse($exchanges);
     }
 }
