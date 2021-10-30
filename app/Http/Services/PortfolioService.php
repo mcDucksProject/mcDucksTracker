@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Models\Portfolio;
 use Illuminate\Database\Eloquent\Collection;
@@ -59,12 +60,15 @@ class PortfolioService
         return Portfolio::whereExchangeId($exchangeId)->get();
     }
 
+    /**
+     * @throws DeleteException
+     */
     function delete($portfolioId): ?bool
     {
         try {
             $portfolio = $this->getById($portfolioId);
         } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException();
+            throw new DeleteException();
         }
         return $portfolio->delete();
     }

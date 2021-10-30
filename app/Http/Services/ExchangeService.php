@@ -6,6 +6,7 @@ use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
 use App\Models\Exchange;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ExchangeService
@@ -51,5 +52,18 @@ class ExchangeService
         } catch (ModelNotFoundException | \Throwable $e) {
             throw new DeleteException();
         }
+    }
+
+    function get(): Collection
+    {
+        return Exchange::all();
+    }
+
+    /**
+     * @throws ModelNotFoundException
+     */
+    function getById($id): Collection
+    {
+        return Exchange::findOrFail($id);
     }
 }

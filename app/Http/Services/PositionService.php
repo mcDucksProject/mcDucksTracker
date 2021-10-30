@@ -3,9 +3,10 @@
 namespace App\Http\Services;
 
 use App\Exceptions\SaveException;
-use App\Models\Position;
+use App\Exceptions\UpdateException;
 use App\Models\Portfolio;
-use Auth;
+use App\Models\Position;
+use App\Models\Token;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -16,32 +17,32 @@ class PositionService
     /**
      * @throws SaveException
      */
-    function create($portfolioId, $symbol, $expectedSell): Position
+    function create($tokenId, $userId, $portfolioId, $status): Position
     {
-        $position = new Position();
         try {
+            $position = new Position();
+            $position->token_id = Token::findOrFail($tokenId)->id;
+            $position->user_id = $userId;
             $position->portfolio_id = Portfolio::findOrFail($portfolioId)->id;
-            $position->symbol = strtoupper($symbol);
-            $position->expected_sell = $expectedSell;
-            $position->user_id = Auth::id();
+            $position->status = $status;
             $position->saveOrFail();
-            return $position;
         } catch (Throwable | ModelNotFoundException $e) {
             throw new SaveException($e->getMessage());
         }
+        return $position;
     }
 
     /**
-     * @throws SaveException
+     * @throws UpdateException
      */
-    function update($holdingId, $expectedSell): Position
+    function update($positionId, $status): Position
     {
         try {
-            $position = Position::findOrFail($holdingId);
-            $position->expected_sell = $expectedSell;
+            $position = Position::findOrFail($positionId);
+            $position->status = $status;
             $position->saveOrFail();
         } catch (Throwable $e) {
-            throw new SaveException();
+            throw new UpdateException();
         }
         return $position;
     }

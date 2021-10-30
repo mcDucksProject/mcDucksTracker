@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Http\Services\PortfolioService;
 use App\Models\Exchange;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class PortfolioController
+class PortfolioController extends Controller
 {
     private PortfolioService $portfolioService;
 
@@ -58,6 +59,16 @@ class PortfolioController
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return new JsonResponse($portfolio, Response::HTTP_OK);
+    }
+
+    function delete($id): JsonResponse
+    {
+        try {
+            $this->portfolioService->delete($id);
+        } catch (DeleteException $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse('', Response::HTTP_NO_CONTENT);
     }
 
     function getById(int $id): JsonResponse
