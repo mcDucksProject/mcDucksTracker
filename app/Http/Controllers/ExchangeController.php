@@ -32,14 +32,13 @@ class ExchangeController extends Controller
         return new JsonResponse($exchange);
     }
 
-    function update(Request $request): JsonResponse
+    function update(int $id, Request $request): JsonResponse
     {
         $params = $request->validate([
-            'id' => 'required',
             'name' => 'required'
         ]);
         try {
-            $exchange = $this->exchangeService->update($params['id'], $params['name']);
+            $exchange = $this->exchangeService->update($id, $params['name']);
         } catch (UpdateException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

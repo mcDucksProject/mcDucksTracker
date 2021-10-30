@@ -19,14 +19,10 @@ class PairController extends Controller
         $this->pairService = $pairService;
     }
 
-    function create(Request $request): JsonResponse
+    function create(int $baseId, int $quoteId): JsonResponse
     {
-        $params = $request->validate([
-            'quote_id' => 'required',
-            'base_id' => 'required'
-        ]);
         try {
-            $pair = $this->pairService->create($params['quote_id'], $params['base_id']);
+            $pair = $this->pairService->create($baseId,$quoteId);
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
