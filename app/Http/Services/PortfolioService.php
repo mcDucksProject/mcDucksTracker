@@ -10,19 +10,29 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PortfolioService
 {
+    private ExchangeService $exchangeService;
+
+    function __construct(ExchangeService $exchangeService)
+    {
+        $this->exchangeService = $exchangeService;
+    }
+
     /**
      * @throws SaveException
      */
-    function create($name, $userId, $exchangeId): Portfolio
+    function create($name, $userId, $exchangeId = "", $exchangeName = ""): Portfolio
     {
-        $portfolio = new Portfolio();
-        $portfolio->user_id = $userId;
-        $portfolio->exchange_id = $exchangeId;
-        $portfolio->name = $name;
         try {
+            $portfolio = new Portfolio();
+            $exchange = $exchangeId != "" ?
+                $this->exchangeService->getById($exchangeId) :
+                $this->exchangeService->getByName($exchangeName);
+            $portfolio->user_id = $userId;
+            $portfolio->exchange_id = $exchange->id;
+            $portfolio->name = $name;
             $portfolio->saveOrFail();
 
-        } catch (\Throwable $e) {
+        } catch (ModelNotFoundException | \Throwable $e) {
             throw new SaveException($e->getMessage());
         }
 

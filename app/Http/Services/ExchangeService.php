@@ -54,7 +54,7 @@ class ExchangeService
         }
     }
 
-    function get(): Collection
+    function getAll(): Collection
     {
         return Exchange::all();
     }
@@ -62,8 +62,13 @@ class ExchangeService
     /**
      * @throws ModelNotFoundException
      */
-    function getById($id): Collection
+    function getById($id): Exchange
     {
         return Exchange::findOrFail($id);
+    }
+
+    function getByName($name): Exchange
+    {
+        return Exchange::whereName($name)->firstOrFail();
     }
 }

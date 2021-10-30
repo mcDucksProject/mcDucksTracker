@@ -5,7 +5,9 @@ Accept: application/json
 
 {
     "name": "Test",
-    "exchange_id": "1"
+    "exchange": {
+        "name": "Binance"
+    }
 }
 
 ###

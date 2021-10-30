@@ -1,0 +1,14 @@
+POST http://localhost:80/api/exchange
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "name": "Binance"
+}
+
+###
+GET http://localhost:80/api/exchange
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

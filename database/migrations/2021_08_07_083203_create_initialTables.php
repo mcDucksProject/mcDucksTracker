@@ -23,17 +23,21 @@ class CreateInitialTables extends Migration
         Schema::create('exchanges', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('tokens', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('pairs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Token::class, 'quote_id')->constrained('tokens');
             $table->foreignIdFor(Token::class, 'base_id')->constrained('tokens');
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
