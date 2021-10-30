@@ -14,7 +14,7 @@ class PairService
     /**
      * @throws SaveException
      */
-    function create($quoteId, $baseId): Pair
+    function create($baseId, $quoteId): Pair
     {
         try {
             $pair = new Pair();
@@ -46,7 +46,7 @@ class PairService
 
     function getByBaseId($baseId): Collection
     {
-        return Pair::whereBaseId($baseId)->get();
+        return Pair::whereBaseId($baseId)->with("base")->get();
     }
 
     function getByQuoteId($quoteId): Collection

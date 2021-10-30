@@ -8,7 +8,7 @@ use App\Exceptions\UpdateException;
 use App\Http\Services\TokenService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class TokenController extends Controller
@@ -33,13 +33,13 @@ class TokenController extends Controller
         return new JsonResponse($token);
     }
 
-    function update(Request $request): JsonResponse
+    function update(int $id, Request $request): JsonResponse
     {
         $params = $request->validate([
             'name' => 'required'
         ]);
         try {
-            $token = $this->tokenService->update($params['name']);
+            $token = $this->tokenService->update($id, $params['name']);
         } catch (UpdateException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -56,10 +56,13 @@ class TokenController extends Controller
         return new JsonResponse('', Response::HTTP_NO_CONTENT);
     }
 
-    function getByName($name): JsonResponse
+    function getByName(Request $request): JsonResponse
     {
+        $params = $request->validate([
+            'name' => 'required'
+        ]);
         try {
-            $token = $this->tokenService->getByName($name);
+            $token = $this->tokenService->getByName($params['name']);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_NO_CONTENT);
         }

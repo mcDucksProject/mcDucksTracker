@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('exchange')->group(function () {
         Route::post('', [ExchangeController::class, 'create']);
-        Route::put('', [ExchangeController::class, 'update']);
+        Route::put('/{id}', [ExchangeController::class, 'update']);
         Route::delete('/{id}', [ExchangeController::class, 'delete']);
         Route::get('', [ExchangeController::class, 'getAll']);
         Route::get('/{id}/portfolios', [PortfolioController::class, 'getByExchange']);
@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('token')->group(function () {
         Route::post('', [TokenController::class, 'create']);
-        Route::put('', [TokenController::class, 'update']);
+        Route::put('/{id}', [TokenController::class, 'update']);
         Route::delete('/{id}', [TokenController::class, 'delete']);
         Route::get('/{id}', [TokenController::class, 'getById']);
         Route::get('', [TokenController::class, 'getByName']);
