@@ -28,14 +28,15 @@ class CreateInitialTables extends Migration
         });
         Schema::create('tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });
         Schema::create('pairs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Token::class, 'quote_id')->constrained('tokens');
             $table->foreignIdFor(Token::class, 'base_id')->constrained('tokens');
+            $table->foreignIdFor(Token::class, 'quote_id')->constrained('tokens');
+            $table->unique(['base_id', 'quote_id']);
             $table->timestamps();
             $table->softDeletes();
         });

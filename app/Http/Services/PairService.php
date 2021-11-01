@@ -46,12 +46,12 @@ class PairService
 
     function getByBaseId($baseId): Collection
     {
-        return Pair::whereBaseId($baseId)->with("base")->get();
+        return Pair::whereBaseId($baseId)->with(["base", "quote"])->get();
     }
 
     function getByQuoteId($quoteId): Collection
     {
-        return Pair::whereQuoteId($quoteId)->get();
+        return Pair::whereQuoteId($quoteId)->with(["base", "quote"])->get();
     }
 
     /**
@@ -61,6 +61,7 @@ class PairService
     {
         return Pair::where('base_id', '=', $baseId)
             ->where('quote_id', '=', $quoteId)
+            ->with(["base", "quote"])
             ->firstOrFail();
     }
 }

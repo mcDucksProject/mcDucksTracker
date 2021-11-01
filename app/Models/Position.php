@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 
@@ -35,6 +36,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Position whereUpdatedAt($value)
  * @method static Builder|Position whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
+ * @property-read int|null $orders_count
+ * @property-read \App\Models\Token $token
  */
 class Position extends Model
 {
@@ -53,5 +57,15 @@ class Position extends Model
     public function portfolio(): BelongsTo
     {
         return $this->belongsTo(Portfolio::class);
+    }
+
+    public function token(): BelongsTo
+    {
+        return $this->belongsTo(Token::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }

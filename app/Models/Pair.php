@@ -24,6 +24,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Pair whereQuoteId($value)
  * @method static Builder|Pair whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $deleted_at
+ * @property-read \App\Models\Token $base
+ * @property-read \App\Models\Token $quote
+ * @method static Builder|Pair whereDeletedAt($value)
  */
 class Pair extends Model
 {

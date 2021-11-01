@@ -7,7 +7,7 @@ use App\Exceptions\SaveException;
 use App\Http\Services\OrderPriceService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderPriceController extends Controller
@@ -19,19 +19,19 @@ class OrderPriceController extends Controller
         $this->orderPriceService = $orderPriceService;
     }
 
-    function create(Request $request): JsonResponse
+    function create($positionId, $orderId, Request $request): JsonResponse
     {
         $params = $request->validate([
-            'order_id' => 'required',
             'pair_id' => 'required',
             'price' => 'required'
         ]);
         try {
             $orderPrice = $this->orderPriceService->create(
-                $params['order_id'],
+                $orderId,
                 \Auth::id(),
                 $params['pair_id'],
-                $params['price']);
+                $params['price']
+            );
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

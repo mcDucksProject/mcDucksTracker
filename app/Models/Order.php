@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 
@@ -37,11 +38,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
  * @mixin Eloquent
- * @property string $status
- * @property string $type
+ * @property string                    $status
+ * @property string                    $type
  * @property-read \App\Models\Position $position
  * @method static Builder|Order whereStatus($value)
  * @method static Builder|Order whereType($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OrderPrice[] $prices
+ * @property-read int|null $prices_count
  */
 class Order extends Model
 {
@@ -63,5 +66,11 @@ class Order extends Model
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
+    }
+
+
+    public function prices(): HasMany
+    {
+        return $this->hasMany(OrderPrice::class);
     }
 }

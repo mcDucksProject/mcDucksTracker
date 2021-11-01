@@ -50,8 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('', [PairController::class, 'getByBaseIdAndQuoteId']);
         });
         Route::prefix('/{id}/pairs')->group(function () {
-            Route::post('', [PairController::class, 'getByBaseId']);
-            Route::post('/as-quote', [PairController::class, 'getByQuoteId']);
+            Route::get('', [PairController::class, 'getByBaseId']);
+            Route::get('/as-quote', [PairController::class, 'getByQuoteId']);
         });
     });
 
@@ -70,19 +70,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [PositionController::class, 'getById']);
         Route::get('', [PositionController::class, 'getByUser']);
         Route::get('/{id}/orders', [OrderController::class, 'getByPosition']);
+        Route::prefix('/{positionId}/order')->group(function () {
+            Route::post('', [OrderController::class, 'create']);
+            Route::put('/{orderId}', [OrderController::class, 'update']);
+            Route::delete('/{orderId}', [OrderController::class, 'delete']);
+            Route::get('/{orderId}', [OrderController::class, 'getById']);
+            Route::get('/{orderId}/prices', [OrderPriceController::class, 'getByOrder']);
+            Route::prefix('/{orderId}/price')->group(function () {
+                Route::post('', [OrderPriceController::class, 'create']);
+                Route::put('/{priceId}', [OrderPriceController::class, 'update']);
+                Route::delete('/{priceId}', [OrderPriceController::class, 'delete']);
+            });
+        });
     });
 
     Route::prefix('order')->group(function () {
-        Route::post('', [OrderController::class, 'create']);
-        Route::put('', [OrderController::class, 'update']);
-        Route::delete('/{id}', [OrderController::class, 'delete']);
-        Route::get('/{id}', [OrderController::class, 'getById']);
-        Route::get('/{id}/prices', [OrderPriceController::class, 'getByOrder']);
-        Route::prefix('/{orderId}/price')->group(function () {
-            Route::post('', [OrderPriceController::class, 'create']);
-            Route::put('', [OrderPriceController::class, 'update']);
-            Route::delete('/{priceId}', [OrderPriceController::class, 'delete']);
-        });
+
     });
 
 });
