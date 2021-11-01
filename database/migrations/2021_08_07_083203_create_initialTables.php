@@ -22,7 +22,7 @@ class CreateInitialTables extends Migration
     {
         Schema::create('exchanges', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -78,6 +78,13 @@ class CreateInitialTables extends Migration
             $table->softDeletes();
         });
         Schema::create('historical_prices', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Pair::class);
+            $table->double('price');
+            $table->timestamp('date');
+            $table->timestamps();
+        });
+        Schema::create('tickers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Pair::class);
             $table->double('price');

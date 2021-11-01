@@ -6,6 +6,7 @@ use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
 use App\Models\Token;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TokenService
@@ -69,5 +70,10 @@ class TokenService
     function getByName($name): Token
     {
         return Token::whereName($name)->firstOrFail();
+    }
+
+    function getAll(): Collection
+    {
+        return Token::all();
     }
 }

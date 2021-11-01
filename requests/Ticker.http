@@ -1,0 +1,5 @@
+###
+GET http://localhost:80/api/ticker/update
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

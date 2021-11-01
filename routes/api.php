@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderPriceController;
 use App\Http\Controllers\PairController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\TickerController;
 use App\Http\Controllers\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [TokenController::class, 'delete']);
         Route::get('/{id}', [TokenController::class, 'getById']);
         Route::get('', [TokenController::class, 'getByName']);
-
         Route::prefix('/{baseId}/pair/{quoteId}')->group(function () {
             Route::post('', [PairController::class, 'create']);
             Route::delete('', [PairController::class, 'delete']);
@@ -84,8 +84,8 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::prefix('order')->group(function () {
-
+    Route::prefix('ticker')->group(function () {
+        Route::get('/update', [TickerController::class, 'updateTickerData']);
     });
 
 });

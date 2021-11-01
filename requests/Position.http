@@ -40,7 +40,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "quantity": 5,
+    "quantity": 499.2,
     "date": "2021-10-31 09:57",
     "status": "filled",
     "type": "buy"
@@ -66,5 +66,16 @@ Accept: application/json
 
 {
     "pair_id": 1,
-    "price": 2.25
+    "price": 0.00003224
+}
+
+###
+POST http://localhost:80/api/position/1/order/1/price
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "pair_id": 2,
+    "price": 2.015
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\TickerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,8 +17,25 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Ticker newQuery()
  * @method static Builder|Ticker query()
  * @mixin Eloquent
+ * @property int         $id
+ * @property int         $pair_id
+ * @property float       $price
+ * @property string      $date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Ticker whereCreatedAt($value)
+ * @method static Builder|Ticker whereDate($value)
+ * @method static Builder|Ticker whereId($value)
+ * @method static Builder|Ticker wherePairId($value)
+ * @method static Builder|Ticker wherePrice($value)
+ * @method static Builder|Ticker whereUpdatedAt($value)
  */
 class Ticker extends Model
 {
     use HasFactory;
+
+    function pair()
+    {
+        $this->belongsTo(Pair::class);
+    }
 }

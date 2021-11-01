@@ -64,4 +64,9 @@ class PairService
             ->with(["base", "quote"])
             ->firstOrFail();
     }
+
+    function getAll(): Collection
+    {
+        return Pair::with(["base", "quote"])->get();
+    }
 }

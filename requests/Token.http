@@ -4,7 +4,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "MIR"
+    "name": "ADA"
 }
 
 ###
@@ -24,13 +24,19 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-GET http://localhost:80/api/token?name=MIR
+GET http://localhost:80/api/token
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 POST http://localhost:80/api/token/3/pair/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+POST http://localhost:80/api/token/3/pair/2
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
