@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,8 +26,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Pair whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property string|null $deleted_at
- * @property-read \App\Models\Token $base
- * @property-read \App\Models\Token $quote
+ * @property-read Token  $base
+ * @property-read Token  $quote
  * @method static Builder|Pair whereDeletedAt($value)
  */
 class Pair extends Model
@@ -39,5 +40,10 @@ class Pair extends Model
     function quote(): BelongsTo
     {
         return $this->belongsTo(Token::class, 'quote_id');
+    }
+
+    function ticker(): HasOne
+    {
+        return $this->hasOne(Ticker::class);
     }
 }

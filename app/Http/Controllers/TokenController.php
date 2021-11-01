@@ -59,14 +59,16 @@ class TokenController extends Controller
     function getByName(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'name' => 'required'
+            'name' => 'string'
         ]);
         try {
-            $token = $this->tokenService->getByName($params['name']);
+            if (key_exists('name', $params)) {
+                return new JsonResponse($this->tokenService->getByName($params['name']));
+            }
+            return new JsonResponse($this->tokenService->getAll());
         } catch (ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_NO_CONTENT);
         }
-        return new JsonResponse($token);
     }
 
     function getById($id): JsonResponse
@@ -77,5 +79,11 @@ class TokenController extends Controller
             return new JsonResponse($e->getMessage(), Response::HTTP_NO_CONTENT);
         }
         return new JsonResponse($token);
+    }
+
+    function getAll(): JsonResponse
+    {
+        $tokens = $this->tokenService->getAll();
+        return new JsonResponse($tokens);
     }
 }
