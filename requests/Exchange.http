@@ -6,6 +6,7 @@ Accept: application/json
 {
     "name": "Binance"
 }
+
 ###
 PUT http://localhost:80/api/exchange/1
 Content-Type: application/json
@@ -15,8 +16,15 @@ Accept: application/json
 {
     "name": "Binance"
 }
+
 ###
 GET http://localhost:80/api/exchange
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/exchange/1/portfolios
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json

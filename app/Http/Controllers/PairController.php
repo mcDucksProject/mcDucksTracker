@@ -7,7 +7,6 @@ use App\Exceptions\SaveException;
 use App\Http\Services\PairService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PairController extends Controller
@@ -22,7 +21,7 @@ class PairController extends Controller
     function create(int $baseId, int $quoteId): JsonResponse
     {
         try {
-            $pair = $this->pairService->create($baseId,$quoteId);
+            $pair = $this->pairService->create($baseId, $quoteId);
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -48,15 +47,15 @@ class PairController extends Controller
         }
     }
 
-    function getByBaseId($baseId): JsonResponse
+    function getByBaseId($id): JsonResponse
     {
-        $pairs = $this->pairService->getByBaseId($baseId);
+        $pairs = $this->pairService->getByBaseId($id);
         return new JsonResponse($pairs);
     }
 
-    function getByQuoteId($quoteId): JsonResponse
+    function getByQuoteId($id): JsonResponse
     {
-        $pairs = $this->pairService->getByQuoteId($quoteId);
+        $pairs = $this->pairService->getByQuoteId($id);
         return new JsonResponse($pairs);
     }
 

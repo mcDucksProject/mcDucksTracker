@@ -1,54 +1,70 @@
-POST http://localhost:80/api/token
+POST http://localhost:80/api/position
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "MIR"
+    "token_id": 3,
+    "portfolio_id": 1,
+    "status": "open"
 }
 
 ###
-PUT http://localhost:80/api/token/1
+DELETE http://localhost:80/api/position/2
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/position/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/position/1/orders
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+POST http://localhost:80/api/position/1/order
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "USDT"
+    "quantity": 5,
+    "date": "2021-10-31 09:57",
+    "status": "filled",
+    "type": "buy"
 }
 
 ###
-GET http://localhost:80/api/token/1
+GET http://localhost:80/api/position/1/order/1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-GET http://localhost:80/api/token?name=MIR
+GET http://localhost:80/api/position/1/order/1/prices
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/token/3/pair/1
+POST http://localhost:80/api/position/1/order/1/price
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
-###
-GET http://localhost:80/api/token/3/pair/2
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-Accept: application/json
-
-###
-GET http://localhost:80/api/token/3/pairs
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-Accept: application/json
-
-###
-GET http://localhost:80/api/token/1/pairs/as-quote
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-Accept: application/json
+{
+    "pair_id": 1,
+    "price": 2.25
+}

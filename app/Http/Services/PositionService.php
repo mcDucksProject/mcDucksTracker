@@ -7,6 +7,7 @@ use App\Exceptions\UpdateException;
 use App\Models\Portfolio;
 use App\Models\Position;
 use App\Models\Token;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -52,16 +53,28 @@ class PositionService
      */
     function getById($positionId): Position
     {
-        return Position::findOrFail($positionId);
+        /** @var Position $position */
+        return $this->addRelations(Position::whereId($positionId))->firstOrFail();
     }
 
     function getByPortfolio($portfolioId): Collection
     {
-        return Position::wherePortfolioId($portfolioId)->get();
+        return $this->addRelations(Position::wherePortfolioId($portfolioId))->get();
     }
 
     function getByUser($userId): Collection
     {
-        return Position::whereUserId($userId)->get();
+        return $this->addRelations(Position::whereUserId($userId))->get();
+    }
+
+    private function addRelations(Builder $builder): Builder
+    {
+        return $builder->with([
+            "token",
+            "token.pairs",
+            "token.pairs.base",
+            "token.pairs.quote",
+            "orders.prices"
+        ]);
     }
 }

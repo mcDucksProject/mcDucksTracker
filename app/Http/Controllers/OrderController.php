@@ -19,10 +19,9 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    function create(Request $request): JsonResponse
+    function create(int $positionId, Request $request): JsonResponse
     {
         $params = $request->validate([
-            'position_id' => 'required',
             'quantity' => 'required',
             'date' => 'required',
             'status' => 'in:filled,open',
@@ -31,7 +30,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->create(
                 \Auth::id(),
-                $params['position_id'],
+                $positionId,
                 $params['quantity'],
                 $params['status'],
                 $params['type'],

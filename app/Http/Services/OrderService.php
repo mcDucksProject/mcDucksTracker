@@ -82,11 +82,11 @@ class OrderService
      */
     function getById($orderId): Order
     {
-        return Order::findOrFail($orderId);
+        return Order::whereId($orderId)->with("position", "position.token", "prices")->firstOrFail();
     }
 
-    function getByPositionId($holdingId): Collection
+    function getByPositionId($positionId): Collection
     {
-        return Order::wherePositionId($holdingId)->get();
+        return Order::wherePositionId($positionId)->with("position", "position.token", "prices")->get();
     }
 }
