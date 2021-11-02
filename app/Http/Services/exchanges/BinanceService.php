@@ -15,9 +15,6 @@ class BinanceService
         $this->binance = $binance;
     }
 
-    /**
-     * @param  Collection  $pairs
-     */
     function getTickersData(Collection $pairs): Collection
     {
 
@@ -29,6 +26,15 @@ class BinanceService
         return $rawTickers->map(function ($rawTicker) use ($pairs) {
             return $this->parseTickerValue($rawTicker, $pairs);
         });
+    }
+
+    function getHistoricalData(
+        Collection $pairs,
+        string $timeframe = "1d",
+        \DateTime $from = null,
+        int $limit = null
+    ): Collection {
+        $candles = $this->binance->fetch_ohlcv($pairs->first(), $timeframe, $from, $limit);
     }
 
     private function encodePair(Pair $pair): string
