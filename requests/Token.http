@@ -4,7 +4,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "ADA"
+    "name": "ICP"
 }
 
 ###
@@ -30,13 +30,13 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/token/3/pair/1
+POST http://localhost:80/api/token/5/pair/1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/token/3/pair/2
+POST http://localhost:80/api/token/5/pair/2
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
