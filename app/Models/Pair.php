@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property-read Token  $base
  * @property-read Token  $quote
  * @method static Builder|Pair whereDeletedAt($value)
+ * @property-read \App\Models\Ticker|null $ticker
  */
 class Pair extends Model
 {
