@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ExchangeController;
+use App\Http\Controllers\HistoricalPriceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderPriceController;
@@ -86,6 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('ticker')->group(function () {
         Route::get('/update', [TickerController::class, 'updateTickerData']);
+    });
+    Route::prefix('historical-price')->group(function () {
+        Route::get('/update', [HistoricalPriceController::class, 'updateHistoricalData']);
     });
 
 });

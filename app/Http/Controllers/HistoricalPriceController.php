@@ -71,4 +71,10 @@ class HistoricalPriceController extends Controller
         );
         return new JsonResponse($historicalPrices);
     }
+
+    function updateHistoricalData(): JsonResponse
+    {
+        $this->historicalPriceService->updateHistoricalPrices();
+        return new JsonResponse();
+    }
 }

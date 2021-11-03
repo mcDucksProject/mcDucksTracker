@@ -3,6 +3,7 @@
 namespace App\Http\Services\exchanges;
 
 use App\Models\Pair;
+use Carbon\Carbon;
 use ccxt\binance;
 use Illuminate\Support\Collection;
 
@@ -28,13 +29,46 @@ class BinanceService
         });
     }
 
+    /*
+     * [
+     *  [
+            1504541580000, // UTC timestamp in milliseconds, integer
+            4235.4,        // (O)pen price, float
+            4240.6,        // (H)ighest price, float
+            4230.0,        // (L)owest price, float
+            4230.7,        // (C)losing price, float
+            37.72941911    // (V)olume (in terms of the base currency), float
+        ],
+        ...
+       ]
+     */
     function getHistoricalData(
         Collection $pairs,
         string $timeframe = "1d",
-        \DateTime $from = null,
+        \DateTime $since = null,
         int $limit = null
     ): Collection {
-        $candles = $this->binance->fetch_ohlcv($pairs->first(), $timeframe, $from, $limit);
+        return $pairs->map(function ($pair) use ($timeframe, $since, $limit) {
+
+            sleep($this->binance->rateLimit / 1000);
+            $data = collect($this->binance->fetch_ohlcv(
+                $this->encodePair($pair),
+                $timeframe,
+                $since->getTimestamp() * 1000,
+                $limit
+            ))->map(function ($ohlcv) {
+                $date = new Carbon($ohlcv[0]);
+                return [
+                    'date' => $date,
+                    'price' => abs(($ohlcv[1] + $ohlcv[2]) / 2)
+                ];
+            });
+            return [
+                'pair' => $pair,
+                'data' => $data
+            ];
+        });
+
     }
 
     private function encodePair(Pair $pair): string

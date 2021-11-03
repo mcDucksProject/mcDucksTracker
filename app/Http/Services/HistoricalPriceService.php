@@ -4,13 +4,26 @@ namespace App\Http\Services;
 
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
+use App\Http\Services\exchanges\BinanceService;
 use App\Models\HistoricalPrice;
 use App\Models\Pair;
-use Illuminate\Database\Eloquent\Collection;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 
 class HistoricalPriceService
 {
+    const TIMEFRAME = '1d';
+    const MAX_CANDLES = 365;
+    private PairService $pairService;
+    private BinanceService $binanceService;
+
+    function __construct(PairService $pairService, BinanceService $binanceService)
+    {
+        $this->pairService = $pairService;
+        $this->binanceService = $binanceService;
+    }
+
     /**
      * @throws SaveException
      */
@@ -55,5 +68,44 @@ class HistoricalPriceService
     function findByPair($pairId): Collection
     {
         return HistoricalPrice::wherePairId($pairId)->get();
+    }
+
+    function updateHistoricalPrices(): bool
+    {
+        $pairs = $this->pairService->getAll();
+        /** @var HistoricalPrice $lastPrice */
+        $lastPrice = HistoricalPrice::orderBy('date', 'desc')->first();
+        if (!is_null($lastPrice) && $lastPrice->date->diffInDays(new Carbon()) <= 0) {
+            return false;
+        }
+        if (is_null($lastPrice)) {
+            $originalDate = new Carbon();
+            $since = $originalDate->subDays(self::MAX_CANDLES);
+        } else {
+            $since = $lastPrice->date;
+        }
+        $historicalData = $this->getHistoricalData($pairs, $since);
+        HistoricalPrice::insert([
+            $historicalData
+        ]);
+
+    }
+
+    private function getHistoricalData(Collection $pairs, $since): Collection
+    {
+
+        return $this->binanceService->getHistoricalData($pairs,
+            self::TIMEFRAME,
+            $since,
+            self::MAX_CANDLES)->map(function ($historicalData) {
+
+            return $historicalData['data']->map(function ($data) use ($historicalData) {
+                return [
+                    'pair_id' => $historicalData['pair']->id,
+                    'price' => $data['price'],
+                    'date' => $data['date']
+                ];
+            });
+        });
     }
 }

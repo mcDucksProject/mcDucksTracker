@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
  * @property int         $id
  * @property int         $pair_id
  * @property float       $price
- * @property string      $date
+ * @property Carbon|null $date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|HistoricalPrice newModelQuery()
@@ -27,10 +27,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HistoricalPrice wherePrice($value)
  * @method static Builder|HistoricalPrice whereUpdatedAt($value)
  * @mixin Eloquent
- * @property-read \App\Models\Pair $pair
+ * @property-read Pair   $pair
  */
 class HistoricalPrice extends Model
 {
+    protected $dates = ["updated_at", "created_at", "date"];
+
     function pair(): BelongsTo
     {
         return $this->belongsTo(Pair::class);
