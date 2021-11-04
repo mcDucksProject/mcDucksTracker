@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Exchange;
+use App\Models\Pair;
 use App\Models\Portfolio;
 use App\Models\Token;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -43,15 +45,35 @@ class DatabaseSeeder extends Seeder
                 'exchange_id' => 1
             ]
         );
-        Token::factory(1)->create(
-            [
-                'name' => 'BTC'
-            ]
-        );
-        Token::factory(1)->create(
-            [
-                'name' => 'USDT'
-            ]
-        );
+        Token::insert([
+            ['name' => 'BTC'],
+            ['name' => 'USDT'],
+            ['name' => 'EUR'],
+            ['name' => 'MIR'],
+            ['name' => 'ICP'],
+            ['name' => 'YFI'],
+            ['name' => 'BNB'],
+            ['name' => 'ADA'],
+            ['name' => 'ROSE'],
+        ]);
+        $tokens = Token::whereNotIn('name', ['BTC', 'USDT','EUR'])->get();
+        $date = new Carbon();
+        $pairs = $tokens->flatMap(function ($token) use ($date){
+            return [
+                [
+                    'quote_id' => 1,
+                    'base_id' => $token->id,
+                    'created_at' => $date,
+                    'updated_at' => $date
+                ],
+                [
+                    'quote_id' => 2,
+                    'base_id' => $token->id,
+                    'created_at' => $date,
+                    'updated_at' => $date
+                ]
+            ];
+        })->toArray();
+        Pair::insert($pairs);
     }
 }

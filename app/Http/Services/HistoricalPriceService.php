@@ -85,10 +85,9 @@ class HistoricalPriceService
             $since = $lastPrice->date;
         }
         $historicalData = $this->getHistoricalData($pairs, $since);
-        HistoricalPrice::insert([
-            $historicalData
-        ]);
-
+        return HistoricalPrice::insert(
+            $historicalData->toArray()
+        );
     }
 
     private function getHistoricalData(Collection $pairs, $since): Collection
@@ -97,7 +96,7 @@ class HistoricalPriceService
         return $this->binanceService->getHistoricalData($pairs,
             self::TIMEFRAME,
             $since,
-            self::MAX_CANDLES)->map(function ($historicalData) {
+            self::MAX_CANDLES)->flatMap(function ($historicalData) {
 
             return $historicalData['data']->map(function ($data) use ($historicalData) {
                 return [

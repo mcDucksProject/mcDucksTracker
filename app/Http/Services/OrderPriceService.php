@@ -9,6 +9,7 @@ use App\Models\OrderPrice;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class OrderPriceService
 {
@@ -33,19 +34,12 @@ class OrderPriceService
             if ($order->position->token_id != $pair->base_id) {
                 throw new InvalidPairException("Pair is not valid for this order");
             }
-
-            $orderPrice = new OrderPrice();
-            $orderPrice->order_id = $orderId;
-            $orderPrice->user_id = $userId;
-            $orderPrice->pair_id = $pairId;
-            $orderPrice->price = $price;
-            $orderPrice->saveOrFail();
-        } catch (ModelNotFoundException | InvalidPairException | \Throwable $e) {
+            $orderPrice = $this->createOrderPrice($orderId, $userId, $pairId, $price);
+        } catch (ModelNotFoundException | InvalidPairException | Throwable $e) {
             throw new SaveException($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return $orderPrice;
     }
-
     /**
      * @throws DeleteException
      */
@@ -53,7 +47,7 @@ class OrderPriceService
     {
         try {
             OrderPrice::findOrFail($orderPriceId)->deleteOrFail();
-        } catch (ModelNotFoundException | \Throwable $e) {
+        } catch (ModelNotFoundException | Throwable $e) {
             throw new DeleteException();
         }
     }
@@ -61,6 +55,20 @@ class OrderPriceService
     function getByOrder($orderId): Collection
     {
         return OrderPrice::whereOrderId($orderId)->get();
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function createOrderPrice($orderId, $userId, $pairId, $price): OrderPrice
+    {
+        $orderPrice = new OrderPrice();
+        $orderPrice->order_id = $orderId;
+        $orderPrice->user_id = $userId;
+        $orderPrice->pair_id = $pairId;
+        $orderPrice->price = $price;
+        $orderPrice->saveOrFail();
+        return $orderPrice;
     }
 
 }
