@@ -22,8 +22,8 @@ class TickerService
     function updateTickers(): JsonResponse
     {
         $now = new Carbon();
-        $lastUpdate = $now->diffInMinutes(Ticker::first()->date, true);
-        if ($lastUpdate >= 1) {
+        $lastTicker = Ticker::first();
+        if (is_null($lastTicker) || $now->diffInMinutes($lastTicker->date, true) >= 1) {
             $pairs = $this->pairService->getAll();
             $tickersData = $this->binanceService->getTickersData($pairs);
             $tickers = $this->parsePairPrices($tickersData, $now);

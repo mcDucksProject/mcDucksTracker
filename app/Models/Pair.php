@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,12 +25,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Pair whereId($value)
  * @method static Builder|Pair whereQuoteId($value)
  * @method static Builder|Pair whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property string|null $deleted_at
- * @property-read Token  $base
- * @property-read Token  $quote
+ * @mixin Eloquent
+ * @property string|null      $deleted_at
+ * @property-read Token       $base
+ * @property-read Token       $quote
  * @method static Builder|Pair whereDeletedAt($value)
- * @property-read \App\Models\Ticker|null $ticker
+ * @property-read Ticker|null $ticker
  */
 class Pair extends Model
 {

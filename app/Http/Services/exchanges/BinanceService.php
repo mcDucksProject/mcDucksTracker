@@ -5,6 +5,7 @@ namespace App\Http\Services\exchanges;
 use App\Models\Pair;
 use Carbon\Carbon;
 use ccxt\binance;
+use DateTime;
 use Illuminate\Support\Collection;
 
 class BinanceService
@@ -45,7 +46,7 @@ class BinanceService
     function getHistoricalData(
         Collection $pairs,
         string $timeframe = "1d",
-        \DateTime $since = null,
+        DateTime $since = null,
         int $limit = null
     ): Collection {
         return $pairs->map(function ($pair) use ($timeframe, $since, $limit) {
@@ -57,7 +58,7 @@ class BinanceService
                 $since->getTimestamp() * 1000,
                 $limit
             ))->map(function ($ohlcv) {
-                $date = new Carbon($ohlcv[0]);
+                $date = new Carbon($ohlcv[0] / 1000);
                 return [
                     'date' => $date,
                     'price' => abs(($ohlcv[1] + $ohlcv[2]) / 2)

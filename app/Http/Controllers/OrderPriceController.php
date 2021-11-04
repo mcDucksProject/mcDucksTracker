@@ -23,7 +23,8 @@ class OrderPriceController extends Controller
     {
         $params = $request->validate([
             'pair_id' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'complete_token_prices' => 'default:false'
         ]);
         try {
             $orderPrice = $this->orderPriceService->create(
