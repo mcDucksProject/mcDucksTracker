@@ -74,6 +74,7 @@ class CreateInitialTables extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Pair::class)->constrained();
             $table->double('price');
+            $table->boolean('auto_calculated',)->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

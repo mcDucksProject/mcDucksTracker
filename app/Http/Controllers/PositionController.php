@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
+use App\Http\Services\OrderService;
 use App\Http\Services\PositionService;
+use Auth;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,10 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 class PositionController extends Controller
 {
     private PositionService $positionService;
+    private OrderService  $orderService;
 
-    public function __construct(PositionService $holdingService)
+    public function __construct(PositionService $holdingService, OrderService $orderService)
     {
         $this->positionService = $holdingService;
+        $this->orderService = $orderService;
     }
 
     function create(Request $request): JsonResponse
@@ -24,21 +29,38 @@ class PositionController extends Controller
         $params = $request->validate([
             'token_id' => 'required',
             'portfolio_id' => 'required',
-            'status' => 'in:open,closed'
+            'status' => 'in:open,closed',
+            'orders' => 'nullable|array:quantity,type,date,prices',
+            'orders.*.prices' => 'nullable|array:quote,price'
         ]);
         try {
             $position = $this->positionService->create(
                 $params['token_id'],
-                \Auth::id(),
+                Auth::id(),
                 $params['portfolio_id'],
                 $params['status']
             );
+            if(!is_null($params['orders']) && sizeof($params['orders']) > 0){
+                $orders = collect($params['orders']);
+                $orders->each(function($order) use ($position){
+                    $this->orderService->create(
+                        Auth::id(),
+                        $position->id,
+                        $order['quantity'],
+                        'filled',
+                        $order['type'],
+                        new Carbon($order['date']),
+
+                    )
+                })
+            }
+
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        $position->refresh();
         return new JsonResponse($position);
     }
-
     function update(Request $request): JsonResponse
     {
         $params = $request->validate([
@@ -78,7 +100,7 @@ class PositionController extends Controller
     function getByUser(): JsonResponse
     {
         try {
-            $holdings = $this->positionService->getByUser(\Auth::id());
+            $holdings = $this->positionService->getByUser(Auth::id());
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }

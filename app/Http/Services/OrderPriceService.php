@@ -26,7 +26,7 @@ class OrderPriceService
     /**
      * @throws SaveException
      */
-    function create($orderId, $userId, $pairId, $price): OrderPrice
+    function create($orderId, $userId, $pairId, $price,$autoCalculated = false): OrderPrice
     {
         try {
             $order = $this->orderService->getById($orderId);
@@ -34,7 +34,7 @@ class OrderPriceService
             if ($order->position->token_id != $pair->base_id) {
                 throw new InvalidPairException("Pair is not valid for this order");
             }
-            $orderPrice = $this->createOrderPrice($orderId, $userId, $pairId, $price);
+            $orderPrice = $this->createOrderPrice($orderId, $userId, $pairId, $price,$autoCalculated);
         } catch (ModelNotFoundException | InvalidPairException | Throwable $e) {
             throw new SaveException($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -60,13 +60,14 @@ class OrderPriceService
     /**
      * @throws Throwable
      */
-    private function createOrderPrice($orderId, $userId, $pairId, $price): OrderPrice
+    private function createOrderPrice($orderId, $userId, $pairId, $price,$autoCalculated): OrderPrice
     {
         $orderPrice = new OrderPrice();
         $orderPrice->order_id = $orderId;
         $orderPrice->user_id = $userId;
         $orderPrice->pair_id = $pairId;
         $orderPrice->price = $price;
+        $orderPrice->auto_calculated = $autoCalculated;
         $orderPrice->saveOrFail();
         return $orderPrice;
     }
