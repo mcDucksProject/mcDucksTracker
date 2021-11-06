@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|OrderPrice whereCreatedAt($value)
  * @method static Builder|OrderPrice whereDeletedAt($value)
  * @method static Builder|OrderPrice whereUpdatedAt($value)
+ * @property int $auto_calculated
+ * @method static Builder|OrderPrice whereAutoCalculated($value)
  */
 class OrderPrice extends Model
 {

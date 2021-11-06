@@ -25,16 +25,20 @@ class OrderController extends Controller
             'quantity' => 'required',
             'date' => 'required',
             'status' => 'in:filled,open',
-            'type' => 'in:buy,sell'
+            'type' => 'in:buy,sell',
         ]);
         try {
+            $prices = array_key_exists('prices',$params)
+                ? collect($params['prices'])
+                : [];
             $order = $this->orderService->create(
                 \Auth::id(),
                 $positionId,
                 $params['quantity'],
                 $params['status'],
                 $params['type'],
-                $params['date']
+                $params['date'],
+                $prices
             );
         } catch (SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
