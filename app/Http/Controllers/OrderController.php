@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Http\Services\OrderService;
+use App\Models\Position;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,9 +32,10 @@ class OrderController extends Controller
             $prices = array_key_exists('prices',$params)
                 ? collect($params['prices'])
                 : [];
+            $position = Position::findOrFail($positionId);
             $order = $this->orderService->create(
                 \Auth::id(),
-                $positionId,
+                $position,
                 $params['quantity'],
                 $params['status'],
                 $params['type'],

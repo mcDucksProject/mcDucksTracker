@@ -7,7 +7,6 @@ use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Models\HistoricalPrice;
 use App\Models\Order;
-use App\Models\OrderPrice;
 use App\Models\Pair;
 use App\Models\Position;
 use Carbon\Carbon;
@@ -32,18 +31,15 @@ class OrderService
      */
     function create(
         int $userId,
-        int $positionId,
+        Position $position,
         float $quantity,
         string $status,
         string $type,
         Carbon $date,
         Collection $prices,
-        $calculateOtherPairs = false,
-        $position = null
+        $calculateOtherPairs = false
     ): Order {
         try {
-            /** @var Position $position */
-            $position = $position ?? Position::with("token")->findOrFail($positionId);
             $order = new Order();
             $order->position_id = $position->id;
             $order->user_id = $userId;
@@ -52,6 +48,7 @@ class OrderService
             $order->status = $status;
             $order->type = $type;
             $order->saveOrFail();
+            $order = $order->refresh();
             if ($prices->count() > 0) {
                 $this->calculatePrices($order, $date, $prices, $calculateOtherPairs);
             }
@@ -60,6 +57,7 @@ class OrderService
             throw new SaveException();
         }
     }
+
     /**
      * @throws CalculatePricesException
      */
@@ -68,30 +66,32 @@ class OrderService
         Carbon $date,
         Collection $prices,
         $calculateOtherPairs
-    ):
-    OrderPrice {
+    ): void {
         $pairs = $order->position->token->pairs;
 
         $remainingPairs = $pairs->filter(function (Pair $pair) use ($prices, $order) {
-            $price = $prices->where('quote', '=', $pair->quote->name);
-            if ($price) {
-                $this->orderPriceService->create(
-                    $order->id,
-                    $order->user_id,
-                    $pair->id,
-                    $price['price']
-                );
+            $price = $prices->where('quote', '=', $pair->quote->name)->first();
+            if (!$price) {
                 return true;
             }
+            $this->orderPriceService->create(
+                $order,
+                $order->user_id,
+                $pair->id,
+                $price['price']
+            );
             return false;
         });
-        if($calculateOtherPairs && $remainingPairs->count() > 0){
-            $remainingPairs->each( function(Pair $pair) use ($date,$order){
+        if ($calculateOtherPairs && $remainingPairs->count() > 0) {
+            $remainingPairs->each(function (Pair $pair) use ($date, $order) {
                 /** @var HistoricalPrice $price */
-                $price = $this->historicalPriceService->findByPairAndDate($pair->id,$date->startOfDay())->first();
+                $price = $this->historicalPriceService->findByPairAndDate(
+                    $pair->id,
+                    $date->startOfDay()
+                )->first();
                 try {
                     $this->orderPriceService->create(
-                        $order->id,
+                        $order,
                         $order->user_id,
                         $pair->id,
                         $price->price

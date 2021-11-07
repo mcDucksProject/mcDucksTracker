@@ -18,13 +18,13 @@ class PositionService
     /**
      * @throws SaveException
      */
-    function create($tokenId, $userId, $portfolioId, $status): Position
+    function create(Token $token, $userId,Portfolio $portfolio, $status): Position
     {
         try {
             $position = new Position();
-            $position->token_id = Token::findOrFail($tokenId)->id;
+            $position->token_id = $token->id;
             $position->user_id = $userId;
-            $position->portfolio_id = Portfolio::findOrFail($portfolioId)->id;
+            $position->portfolio_id = $portfolio->id;
             $position->status = $status;
             $position->saveOrFail();
         } catch (Throwable | ModelNotFoundException $e) {

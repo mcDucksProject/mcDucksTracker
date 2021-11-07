@@ -53,9 +53,9 @@ class HistoricalPriceService
         }
     }
 
-    function findByPairAndDate($pairId, $date): Collection
+    function findByPairAndDate(int $pairId, Carbon $date): Collection
     {
-        return HistoricalPrice::wherePairId($pairId)->whereDate($date)->get();
+        return HistoricalPrice::wherePairId($pairId)->whereDate('date',$date)->get();
     }
 
     function findByPairBetweenDates($pairId, $startDate, $endDate): Collection
