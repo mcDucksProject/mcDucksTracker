@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
 use App\Http\Services\OrderService;
+use App\Http\Services\PortfolioService;
 use App\Http\Services\PositionService;
+use App\Http\Services\TokenService;
+use App\Models\Portfolio;
+use App\Models\Token;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,43 +20,58 @@ use Symfony\Component\HttpFoundation\Response;
 class PositionController extends Controller
 {
     private PositionService $positionService;
-    private OrderService  $orderService;
+    private OrderService $orderService;
+    private TokenService $tokenService;
+    private PortfolioService $portfolioService;
 
-    public function __construct(PositionService $holdingService, OrderService $orderService)
-    {
-        $this->positionService = $holdingService;
+    public function __construct(
+        PositionService $positionService,
+        OrderService $orderService,
+        TokenService $tokenService,
+        PortfolioService $portfolioService
+    ) {
+        $this->positionService = $positionService;
         $this->orderService = $orderService;
+        $this->tokenService = $tokenService;
+        $this->portfolioService = $portfolioService;
     }
 
     function create(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'token_id' => 'required',
-            'portfolio_id' => 'required',
+            'token.name' => 'required_if:token.id,null',
+            'token.id' => 'required_if:token.name,null',
+            'portfolio.id' => 'required',
             'status' => 'in:open,closed',
-            'orders' => 'nullable|array:quantity,type,date,prices',
-            'orders.*.prices' => 'nullable|array:quote,price'
+            'orders.*' => 'nullable|array:quantity,type,date,prices',
+            'orders.*.prices.*' => 'nullable|array:quote,price'
         ]);
         try {
+            $token = array_key_exists('id', $params['token'])
+                ? $this->tokenService->getById($params['token']['id'])
+                : $this->tokenService->getByName($params['token']['name']);
+            $portfolio = Portfolio::findOrFail($params['portfolio']['id']);
             $position = $this->positionService->create(
-                $params['token_id'],
+                $token,
                 Auth::id(),
-                $params['portfolio_id'],
+                $portfolio,
                 $params['status']
             );
-            if(!is_null($params['orders']) && sizeof($params['orders']) > 0){
+            if (!is_null($params['orders']) && sizeof($params['orders']) > 0) {
                 $orders = collect($params['orders']);
-                $orders->each(function($order) use ($position){
+                $orders->each(function ($order) use ($position) {
+                    $prices = collect($order['prices']);
                     $this->orderService->create(
                         Auth::id(),
-                        $position->id,
+                        $position,
                         $order['quantity'],
                         'filled',
                         $order['type'],
                         new Carbon($order['date']),
-
-                    )
-                })
+                        $prices,
+                        true
+                    );
+                });
             }
 
         } catch (SaveException $e) {
@@ -61,6 +80,7 @@ class PositionController extends Controller
         $position->refresh();
         return new JsonResponse($position);
     }
+
     function update(Request $request): JsonResponse
     {
         $params = $request->validate([
