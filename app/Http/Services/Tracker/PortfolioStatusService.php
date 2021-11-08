@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\tracker;
+namespace App\Http\Services\Tracker;
 
 class PortfolioStatusService
 {

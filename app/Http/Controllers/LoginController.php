@@ -19,7 +19,7 @@ class LoginController extends Controller
 
     public function generateApiToken(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
             'device_name' => 'required'
@@ -27,9 +27,9 @@ class LoginController extends Controller
 
         try {
             $token = $this->loginService->generateApiToken(
-                $request->get('email'),
-                $request->get('password'),
-                $request->get('device_name')
+                $params['email'],
+                $params['password'],
+                $params['device_name']
             );
         } catch (ValidationException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
