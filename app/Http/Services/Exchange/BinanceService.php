@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\exchanges;
+namespace App\Http\Services\Exchange;
 
 use App\Models\Pair;
 use Carbon\Carbon;

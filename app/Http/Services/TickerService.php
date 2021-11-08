@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-use App\Http\Services\exchanges\BinanceService;
+use App\Http\Services\Exchange\BinanceService;
 use App\Models\Ticker;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;

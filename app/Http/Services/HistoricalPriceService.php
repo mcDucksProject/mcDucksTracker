@@ -4,12 +4,13 @@ namespace App\Http\Services;
 
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
-use App\Http\Services\exchanges\BinanceService;
+use App\Http\Services\Exchange\BinanceService;
 use App\Models\HistoricalPrice;
 use App\Models\Pair;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class HistoricalPriceService
 {
@@ -35,7 +36,7 @@ class HistoricalPriceService
             $historicalPrice->date = $date;
             $historicalPrice->price = $price;
             $historicalPrice->saveOrFail();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new SaveException();
         }
         return $historicalPrice;
@@ -48,7 +49,7 @@ class HistoricalPriceService
     {
         try {
             HistoricalPrice::findOrFail($historicalPriceId)->deleteOrFail();
-        } catch (ModelNotFoundException | \Throwable $e) {
+        } catch (ModelNotFoundException | Throwable $e) {
             throw new DeleteException();
         }
     }
@@ -75,7 +76,7 @@ class HistoricalPriceService
         $pairs = $this->pairService->getAll();
         /** @var HistoricalPrice $lastPrice */
         $lastPrice = HistoricalPrice::orderBy('date', 'desc')->first();
-        if (!is_null($lastPrice) && $lastPrice->date->diffInDays(new Carbon()) <= 0) {
+        if ($lastPrice->date->diffInDays(new Carbon()) <= 0) {
             return false;
         }
         if (is_null($lastPrice)) {

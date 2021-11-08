@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Http\Services\OrderPriceService;
+use Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class OrderPriceController extends Controller
         $this->orderPriceService = $orderPriceService;
     }
 
-    function create($positionId, $orderId, Request $request): JsonResponse
+    function create($orderId, Request $request): JsonResponse
     {
         $params = $request->validate([
             'pair_id' => 'required',
@@ -29,7 +30,7 @@ class OrderPriceController extends Controller
         try {
             $orderPrice = $this->orderPriceService->create(
                 $orderId,
-                \Auth::id(),
+                Auth::id(),
                 $params['pair_id'],
                 $params['price']
             );
@@ -49,6 +50,7 @@ class OrderPriceController extends Controller
         } catch (DeleteException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        return new JsonResponse('', Response::HTTP_NO_CONTENT);
     }
 
     function getByOrder(int $orderId): JsonResponse

@@ -15715,29 +15715,7 @@
      
 }
 
-        namespace L5Swagger { 
-            /**
-     * 
-     *
-     */ 
-        class L5SwaggerFacade {
-                    /**
-         * 
-         *
-         * @throws L5SwaggerException
-         * @static 
-         */ 
-        public static function generateDocs()
-        {
-                        /** @var \L5Swagger\Generator $instance */
-                        return $instance->generateDocs();
-        }
-         
-    }
-     
-}
-
-    namespace Facade\Ignition\Facades { 
+        namespace Facade\Ignition\Facades { 
             /**
      * Class Flare.
      *
@@ -19494,7 +19472,6 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
-            class L5Swagger extends \L5Swagger\L5SwaggerFacade {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
      
 }
