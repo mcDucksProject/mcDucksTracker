@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\Tracker;
 
-class PortfolioStatusService
+class PortfolioSummaryService
 {
 
 }

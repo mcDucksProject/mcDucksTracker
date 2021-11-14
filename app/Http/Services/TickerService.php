@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Services\Exchange\BinanceService;
+use App\Models\Pair;
 use App\Models\Ticker;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -32,15 +33,18 @@ class TickerService
         }
         return new JsonResponse();
     }
+    public function getPriceByPair(Pair $pair){
 
-    private function parsePairPrices(Collection $tickersData, Carbon $now): array
+    }
+    private function parsePairPrices(Collection $tickersData, Carbon $tickerDate): array
     {
-        return $tickersData->map(function ($tickerData) use ($now) {
+        return $tickersData->map(function ($tickerData) use ($tickerDate) {
             return [
                 'pair_id' => $tickerData['pair']->id,
-                'date' => $now,
+                'ticker_date' => $tickerDate,
                 'price' => $tickerData['price']
             ];
         })->all();
     }
+
 }

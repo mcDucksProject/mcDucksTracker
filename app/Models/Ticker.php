@@ -20,7 +20,6 @@ use Illuminate\Support\Carbon;
  * @property int         $id
  * @property int         $pair_id
  * @property float       $price
- * @property string      $date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|Ticker whereCreatedAt($value)
@@ -29,6 +28,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Ticker wherePairId($value)
  * @method static Builder|Ticker wherePrice($value)
  * @method static Builder|Ticker whereUpdatedAt($value)
+ * @property Carbon $ticker_date
+ * @method static Builder|Ticker whereTickerDate($value)
  */
 class Ticker extends Model
 {
