@@ -64,7 +64,7 @@ class CreateInitialTables extends Migration
             $table->double('quantity');
             $table->enum('status', ['filled', 'open']);
             $table->enum('type', ['buy', 'sell']);
-            $table->timestamp('date');
+            $table->timestamp('order_date');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -82,14 +82,14 @@ class CreateInitialTables extends Migration
             $table->id();
             $table->foreignIdFor(Pair::class);
             $table->double('price');
-            $table->timestamp('date');
+            $table->timestamp('price_date');
             $table->timestamps();
         });
         Schema::create('tickers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Pair::class);
             $table->double('price');
-            $table->timestamp('date');
+            $table->timestamp('ticker_date');
             $table->timestamps();
         });
     }

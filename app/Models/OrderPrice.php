@@ -6,6 +6,8 @@ use App\Http\Scopes\UserScope;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\OrderPrice
@@ -24,14 +26,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|OrderPrice wherePrice($value)
  * @method static Builder|OrderPrice whereUserId($value)
  * @mixin Eloquent
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @method static Builder|OrderPrice whereCreatedAt($value)
  * @method static Builder|OrderPrice whereDeletedAt($value)
  * @method static Builder|OrderPrice whereUpdatedAt($value)
- * @property int $auto_calculated
+ * @property int         $auto_calculated
  * @method static Builder|OrderPrice whereAutoCalculated($value)
+ * @property-read Order  $order
+ * @property-read Pair   $pair
+ * @property-read User   $user
  */
 class OrderPrice extends Model
 {
@@ -40,18 +45,18 @@ class OrderPrice extends Model
         static::addGlobalScope(new UserScope());
     }
 
-    function order()
+    function order(): BelongsTo
     {
-        $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class);
     }
 
-    function user()
+    function user(): BelongsTo
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    function pair()
+    function pair(): BelongsTo
     {
-        $this->belongsTo(Pair::class);
+        return $this->belongsTo(Pair::class);
     }
 }

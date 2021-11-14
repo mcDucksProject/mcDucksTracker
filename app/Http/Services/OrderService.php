@@ -44,7 +44,7 @@ class OrderService
             $order->position_id = $position->id;
             $order->user_id = $userId;
             $order->quantity = $quantity;
-            $order->date = $date;
+            $order->order_date = $date;
             $order->status = $status;
             $order->type = $type;
             $order->saveOrFail();
@@ -119,7 +119,7 @@ class OrderService
                 $order->quantity = $quantity;
             }
             if ($date != "") {
-                $order->date = $date;
+                $order->order_date = $date;
             }
             if ($status != "") {
                 $order->status = $status;

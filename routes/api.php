@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderPriceController;
 use App\Http\Controllers\PairController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\PositionSummaryController;
 use App\Http\Controllers\TickerController;
 use App\Http\Controllers\TokenController;
 use Illuminate\Http\Request;
@@ -71,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [PositionController::class, 'getById']);
         Route::get('', [PositionController::class, 'getByUser']);
         Route::get('/{id}/orders', [OrderController::class, 'getByPosition']);
+        Route::get('/{id}/summary', [PositionSummaryController::class, 'getPositionSummary']);
         Route::prefix('/{positionId}/order')->group(function () {
             Route::post('', [OrderController::class, 'create']);
             Route::put('/{orderId}', [OrderController::class, 'update']);
@@ -91,6 +93,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('historical-price')->group(function () {
         Route::get('/update', [HistoricalPriceController::class, 'updateHistoricalData']);
     });
-
 });
 

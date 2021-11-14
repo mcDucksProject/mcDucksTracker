@@ -33,7 +33,7 @@ class HistoricalPriceService
         try {
             $historicalPrice = new HistoricalPrice();
             $historicalPrice->pair_id = Pair::findOrFail($pairId)->id;
-            $historicalPrice->date = $date;
+            $historicalPrice->price_date = $date;
             $historicalPrice->price = $price;
             $historicalPrice->saveOrFail();
         } catch (Throwable $e) {
@@ -56,14 +56,15 @@ class HistoricalPriceService
 
     function findByPairAndDate(int $pairId, Carbon $date): Collection
     {
-        return HistoricalPrice::wherePairId($pairId)->whereDate('date',$date)->get();
+        return HistoricalPrice::wherePairId($pairId)->whereDate('price_date',$date)->get();
     }
 
     function findByPairBetweenDates($pairId, $startDate, $endDate): Collection
     {
         return HistoricalPrice::wherePairId($pairId)
-            ->where('date', '>=', $startDate)
-            ->where('date', '<=', $endDate)->get();
+            ->where('price_date', '>=', $startDate)
+            ->where('price_date', '<=', $endDate)
+            ->get();
     }
 
     function findByPair($pairId): Collection
@@ -75,15 +76,16 @@ class HistoricalPriceService
     {
         $pairs = $this->pairService->getAll();
         /** @var HistoricalPrice $lastPrice */
-        $lastPrice = HistoricalPrice::orderBy('date', 'desc')->first();
-        if ($lastPrice->date->diffInDays(new Carbon()) <= 0) {
-            return false;
-        }
+        $lastPrice = HistoricalPrice::orderBy('price_date', 'desc')->first();
+
         if (is_null($lastPrice)) {
             $originalDate = new Carbon();
             $since = $originalDate->subDays(self::MAX_CANDLES);
         } else {
-            $since = $lastPrice->date;
+            if ($lastPrice->price_date->diffInDays(new Carbon()) <= 0) {
+                return false;
+            }
+            $since = $lastPrice->price_date;
         }
         $historicalData = $this->getHistoricalData($pairs, $since);
         return HistoricalPrice::insert(
@@ -103,7 +105,7 @@ class HistoricalPriceService
                 return [
                     'pair_id' => $historicalData['pair']->id,
                     'price' => $data['price'],
-                    'date' => $data['date']
+                    'price_date' => $data['date']
                 ];
             });
         });

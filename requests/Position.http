@@ -91,7 +91,7 @@ Accept: application/json
         "name": "MIR"
     },
     "portfolio": {
-        "id" : 1
+        "id": 1
     },
     "status": "open",
     "orders": [
@@ -107,59 +107,65 @@ Accept: application/json
             ]
         },
         {
-            "quantity" : 3.68,
-            "type" : "buy",
-            "date" : "2021-07-15 09:40",
-            "prices" : [
+            "quantity": 3.68,
+            "type": "buy",
+            "date": "2021-07-15 09:40",
+            "prices": [
                 {
-                    "quote" : "BTC",
-                    "price" : 0.0001044
+                    "quote": "BTC",
+                    "price": 0.0001044
                 }
             ]
         },
         {
-            "quantity" : 35,
-            "type" : "buy",
-            "date" : "2021-07-15 10:51",
-            "prices" : [
+            "quantity": 35,
+            "type": "buy",
+            "date": "2021-07-15 10:51",
+            "prices": [
                 {
-                    "quote" : "BTC",
-                    "price" : 0.000105
+                    "quote": "BTC",
+                    "price": 0.000105
                 }
             ]
         },
         {
-            "quantity" : 40,
-            "type" : "buy",
-            "date" : "2021-07-20 12:27",
-            "prices" : [
+            "quantity": 40,
+            "type": "buy",
+            "date": "2021-07-20 12:27",
+            "prices": [
                 {
-                    "quote" : "BTC",
-                    "price" : 0.000084
+                    "quote": "BTC",
+                    "price": 0.000084
                 }
             ]
         },
         {
-            "quantity" : 40,
-            "type" : "buy",
-            "date" : "2021-07-20 13:34",
-            "prices" : [
+            "quantity": 40,
+            "type": "buy",
+            "date": "2021-07-20 13:34",
+            "prices": [
                 {
-                    "quote" : "BTC",
-                    "price" : 0.000075
+                    "quote": "BTC",
+                    "price": 0.000075
                 }
             ]
         },
         {
-            "quantity" : 136.5,
-            "type" : "buy",
-            "date" : "2021-10-04 19:52",
-            "prices" : [
+            "quantity": 136.5,
+            "type": "buy",
+            "date": "2021-10-04 19:52",
+            "prices": [
                 {
-                    "quote" : "BTC",
-                    "price" : 0.0001044
+                    "quote": "BTC",
+                    "price": 0.0001044
                 }
             ]
         }
     ]
 }
+
+###
+GET http://localhost:80/api/position/1/summary
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

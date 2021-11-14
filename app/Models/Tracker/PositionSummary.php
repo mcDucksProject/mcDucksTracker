@@ -9,11 +9,13 @@ use Illuminate\Support\Collection;
 class PositionSummary
 {
     private Token $base;
+    private float $quantity;
     private Collection $quotesSummary;
     private Carbon $startDate;
 
     public function __construct(){
         $this->quotesSummary = new Collection(QuoteSummary::class);
+        $this->quantity = 0;
     }
     public function getBase(): Token
     {
@@ -47,5 +49,18 @@ class PositionSummary
         $this->startDate = $startDate;
         return $this;
     }
-
+    public function getQuantity(): float
+    {
+        return $this->quantity;
+    }
+    public function setQuantity(float $quantity): PositionSummary
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+    public function addQuantity(float $quantity): PositionSummary
+    {
+        $this->quantity += $quantity;
+        return $this;
+    }
 }
