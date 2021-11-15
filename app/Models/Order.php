@@ -17,14 +17,14 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Order
  *
- * @property int           $id
- * @property int           $user_id
- * @property int           $position_id
- * @property float         $quantity
- * @property Carbon|null   $created_at
- * @property Carbon|null   $updated_at
- * @property string|null   $deleted_at
- * @property-read User     $user
+ * @property int                          $id
+ * @property int                          $user_id
+ * @property int                          $position_id
+ * @property float                        $quantity
+ * @property Carbon|null                  $created_at
+ * @property Carbon|null                  $updated_at
+ * @property string|null                  $deleted_at
+ * @property-read User                    $user
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -45,14 +45,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Order whereType($value)
  * @property-read Collection|OrderPrice[] $prices
  * @property-read int|null                $prices_count
- * @property Carbon $order_date
+ * @property Carbon                       $order_date
  * @method static Builder|Order whereOrderDate($value)
  */
 class Order extends Model
 {
     use HasFactory;
 
-    protected $dates = ['date', 'created_at', 'updated_at'];
+    protected $dates = ['order_date', 'created_at', 'updated_at'];
     protected $dateFormat = "Y-m-d H:i";
 
     public static function booted()

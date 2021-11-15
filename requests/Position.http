@@ -157,7 +157,7 @@ Accept: application/json
             "prices": [
                 {
                     "quote": "BTC",
-                    "price": 0.0001044
+                    "price": 0.0000614
                 }
             ]
         }
