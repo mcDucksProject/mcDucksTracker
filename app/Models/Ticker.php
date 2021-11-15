@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\TickerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Ticker
  *
- * @method static \Database\Factories\TickerFactory factory(...$parameters)
+ * @method static TickerFactory factory(...$parameters)
  * @method static Builder|Ticker newModelQuery()
  * @method static Builder|Ticker newQuery()
  * @method static Builder|Ticker query()
@@ -28,12 +29,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Ticker wherePairId($value)
  * @method static Builder|Ticker wherePrice($value)
  * @method static Builder|Ticker whereUpdatedAt($value)
- * @property Carbon $ticker_date
+ * @property Carbon      $ticker_date
  * @method static Builder|Ticker whereTickerDate($value)
  */
 class Ticker extends Model
 {
     use HasFactory;
+
+    protected $dates = ['ticker_date', 'created_at', 'updated_at'];
 
     function pair()
     {

@@ -3,38 +3,68 @@
 namespace App\Models\Tracker;
 
 use App\Models\Pair;
-use App\Models\Token;
+use Carbon\Carbon;
 
 class QuoteSummary
 {
-    private Token $quote;
     private Pair $pair;
-    private float $averageBuy;
-    private float $averageSell;
-    private float $actualPrice;
-    private float $invested;
+    private float $quantity = 0;
+    private float $averageSell = 0;
+    private float $actualPrice = 0;
+    private float $invested = 0;
+    private Carbon $lastTickerUpdate;
 
-    public function getQuote(): string
+    public function getPnLInPrice(): float
     {
-        return $this->quote;
+        return ($this->invested * $this->getPnLInPercentage()) - $this->invested;
     }
 
-    public function setQuote(Token $quote): QuoteSummary
+    public function getPnLInPercentage(bool $formatted = false): float
     {
-        $this->quote = $quote;
-        return $this;
+        $percentage = $this->getAverageBuy() != 0 ? $this->actualPrice / $this->getAverageBuy() : 0;
+        if ($formatted) {
+            return ($percentage - 1) * 100;
+        }
+        return $percentage;
+
     }
 
     public function getAverageBuy(): float
     {
-        return $this->averageBuy;
+        return $this->invested / $this->quantity;
     }
 
-    public function setAverageBuy(float $averageBuy): QuoteSummary
+    /**
+     * @return Carbon
+     */
+    public function getLastTickerUpdate(): Carbon
     {
-        $this->averageBuy = $averageBuy;
+        return $this->lastTickerUpdate;
+    }
+
+    /**
+     * @param  Carbon  $lastTickerUpdate
+     *
+     * @return QuoteSummary
+     */
+    public function setLastTickerUpdate(Carbon $lastTickerUpdate): QuoteSummary
+    {
+        $this->lastTickerUpdate = $lastTickerUpdate;
         return $this;
     }
+
+
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(float $quantity): QuoteSummary
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
 
     public function getAverageSell(): float
     {

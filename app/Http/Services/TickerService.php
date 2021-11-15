@@ -24,7 +24,7 @@ class TickerService
     {
         $now = new Carbon();
         $lastTicker = Ticker::first();
-        if (is_null($lastTicker) || $now->diffInMinutes($lastTicker->date, true) >= 1) {
+        if (is_null($lastTicker) || $now->diffInMinutes($lastTicker->ticker_date, true) >= 1) {
             $pairs = $this->pairService->getAll();
             $tickersData = $this->binanceService->getTickersData($pairs);
             $tickers = $this->parsePairPrices($tickersData, $now);
@@ -33,9 +33,7 @@ class TickerService
         }
         return new JsonResponse();
     }
-    public function getPriceByPair(Pair $pair){
 
-    }
     private function parsePairPrices(Collection $tickersData, Carbon $tickerDate): array
     {
         return $tickersData->map(function ($tickerData) use ($tickerDate) {
@@ -45,6 +43,11 @@ class TickerService
                 'price' => $tickerData['price']
             ];
         })->all();
+    }
+
+    public function getPriceByPair(Pair $pair)
+    {
+        return Ticker::wherePairId($pair->id)->first();
     }
 
 }

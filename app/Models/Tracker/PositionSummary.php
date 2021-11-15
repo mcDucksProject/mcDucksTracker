@@ -13,10 +13,12 @@ class PositionSummary
     private Collection $quotesSummary;
     private Carbon $startDate;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->quotesSummary = new Collection(QuoteSummary::class);
         $this->quantity = 0;
     }
+
     public function getBase(): Token
     {
         return $this->base;
@@ -31,6 +33,12 @@ class PositionSummary
     public function getQuotesSummary(): Collection
     {
         return $this->quotesSummary;
+    }
+
+    public function setQuotesSummary(Collection $quotesSummary): PositionSummary
+    {
+        $this->quotesSummary = $quotesSummary;
+        return $this;
     }
 
     public function addQuoteSummary(QuoteSummary $quotesSummary): PositionSummary
@@ -49,15 +57,18 @@ class PositionSummary
         $this->startDate = $startDate;
         return $this;
     }
+
     public function getQuantity(): float
     {
         return $this->quantity;
     }
+
     public function setQuantity(float $quantity): PositionSummary
     {
         $this->quantity = $quantity;
         return $this;
     }
+
     public function addQuantity(float $quantity): PositionSummary
     {
         $this->quantity += $quantity;
