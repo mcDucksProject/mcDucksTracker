@@ -9,13 +9,13 @@ use App\Http\Services\PortfolioService;
 use App\Http\Services\PositionService;
 use App\Http\Services\TokenService;
 use App\Models\Portfolio;
-use App\Models\Token;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PositionController extends Controller
 {
@@ -74,7 +74,7 @@ class PositionController extends Controller
                 });
             }
 
-        } catch (SaveException $e) {
+        } catch (NotFoundHttpException | ModelNotFoundException | SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $position->refresh();

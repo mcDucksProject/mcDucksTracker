@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('', [PositionController::class, 'getByUser']);
         Route::get('/{id}/orders', [OrderController::class, 'getByPosition']);
         Route::get('/{id}/summary', [PositionSummaryController::class, 'getPositionSummary']);
+        Route::get('/{id}/summary/{format}', [PositionSummaryController::class, 'getPositionSummary']);
         Route::prefix('/{positionId}/order')->group(function () {
             Route::post('', [OrderController::class, 'create']);
             Route::put('/{orderId}', [OrderController::class, 'update']);

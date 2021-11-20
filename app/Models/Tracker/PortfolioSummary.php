@@ -4,7 +4,7 @@ namespace App\Models\Tracker;
 
 use Illuminate\Support\Collection;
 
-class PortfolioStatus
+class PortfolioSummary
 {
     private Collection $openPositions;
 }

@@ -165,7 +165,352 @@ Accept: application/json
 }
 
 ###
-GET http://localhost:80/api/position/1/summary
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "ICP"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 1.5,
+            "type": "buy",
+            "date": "2021-08-10 21:20",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.00158
+                }
+            ]
+        },
+        {
+            "quantity": 2,
+            "type": "buy",
+            "date": "2021-08-10 21:25",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001577
+                }
+            ]
+        },
+        {
+            "quantity": 3,
+            "type": "buy",
+            "date": "2021-08-11 23:20",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001465
+                }
+            ]
+        },
+        {
+            "quantity": 0.45,
+            "type": "buy",
+            "date": "2021-08-11 23:21",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001464
+                }
+            ]
+        },
+        {
+            "quantity": 1.05,
+            "type": "buy",
+            "date": "2021-08-11 23:21",
+            "prices": [
+                {
+                    "quote": "BNB",
+                    "price": 0.1725
+                }
+            ]
+        },
+        {
+            "quantity": 1.68,
+            "type": "buy",
+            "date": "2021-08-15 23:21",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001357
+                }
+            ]
+        },
+        {
+            "quantity": 0.32,
+            "type": "buy",
+            "date": "2021-08-23 10:47",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001302
+                }
+            ]
+        },
+        {
+            "quantity": 1,
+            "type": "buy",
+            "date": "2021-08-23 12:16",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001302
+                }
+            ]
+        },
+        {
+            "quantity": 2,
+            "type": "buy",
+            "date": "2021-09-01 19:56",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001345
+                }
+            ]
+        },
+        {
+            "quantity": 3,
+            "type": "buy",
+            "date": "2021-09-11 21:37",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.001298
+                }
+            ]
+        },
+        {
+            "quantity": 16,
+            "type": "buy",
+            "date": "2021-11-01 22:48",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.000758
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "YFI"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 0.0157,
+            "type": "buy",
+            "date": "2021-08-21 16:26",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.79659
+                }
+            ]
+        },
+        {
+            "quantity": 0.0043,
+            "type": "buy",
+            "date": "2021-08-27 09:09",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.7728
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "ADA"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 49.6,
+            "type": "buy",
+            "date": "2021-10-29 20:19",
+            "prices": [
+                {
+                    "quote": "USDT",
+                    "price": 2.015
+                }
+            ]
+        },
+        {
+            "quantity": 200,
+            "type": "buy",
+            "date": "2021-08-29 20:20",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.00003224
+                },
+                {
+                    "quote": "USDT",
+                    "price": 2.015
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "BNB"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 1,
+            "type": "buy",
+            "date": "2021-10-13 14:51",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.008178
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "BNB"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 1,
+            "type": "buy",
+            "date": "2021-10-13 14:51",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.008178
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "ZIL"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 4931,
+            "type": "buy",
+            "date": "2021-11-09 11:08",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.00000168
+                }
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:80/api/position
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+{
+    "token": {
+        "name": "SHIB"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 3262874,
+            "type": "buy",
+            "date": "2021-11-08 11:08",
+            "prices": [
+                {
+                    "quote": "USDT",
+                    "price": 0.00005374
+                }
+            ]
+        }
+    ]
+}
+
+###
+GET http://localhost:80/api/position/6/summary
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+GET http://localhost:80/api/position/2/summary/string
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json

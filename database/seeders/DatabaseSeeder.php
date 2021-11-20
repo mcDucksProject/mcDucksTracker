@@ -55,8 +55,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'BNB'],
             ['name' => 'ADA'],
             ['name' => 'ROSE'],
+            ['name' => 'ZIL'],
+            ['name' => 'SHIB']
         ]);
-        $tokens = Token::whereNotIn('name', ['BTC', 'USDT', 'EUR', 'BNB'])->get();
+        $tokens = Token::whereNotIn('name', ['BTC', 'USDT', 'EUR'])->get();
         $date = new Carbon();
         $pairs = $tokens->flatMap(function ($token) use ($date) {
             return [

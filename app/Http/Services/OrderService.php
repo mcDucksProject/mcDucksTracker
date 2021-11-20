@@ -37,7 +37,7 @@ class OrderService
         string $type,
         Carbon $date,
         Collection $prices,
-        $calculateOtherPairs = false
+        bool $calculateOtherPairs = false
     ): Order {
         try {
             $order = new Order();
@@ -65,7 +65,7 @@ class OrderService
         Order $order,
         Carbon $date,
         Collection $prices,
-        $calculateOtherPairs
+        bool $calculateOtherPairs = false
     ): void {
         $pairs = $order->position->token->pairs;
 
@@ -107,18 +107,18 @@ class OrderService
      * @throws SaveException
      */
     function update(
-        $orderId,
-        $quantity = "",
-        $status = "",
-        $type = "",
-        $date = ""
+        int $orderId,
+        float $quantity = 0.0,
+        string $status = "",
+        string $type = "",
+        Carbon $date = null
     ): Order {
         try {
             $order = Order::findOrFail($orderId);
-            if ($quantity != "") {
+            if ($quantity != 0.0) {
                 $order->quantity = $quantity;
             }
-            if ($date != "") {
+            if ($date != null) {
                 $order->order_date = $date;
             }
             if ($status != "") {
@@ -138,7 +138,7 @@ class OrderService
     /**
      * @throws DeleteException
      */
-    function delete($orderId)
+    function delete(int $orderId)
     {
         try {
             $order = Order::findOrFail($orderId);
@@ -152,12 +152,12 @@ class OrderService
     /**
      * @throws ModelNotFoundException
      */
-    function getById($orderId): Order
+    function getById(int $orderId): Order
     {
         return Order::whereId($orderId)->with("position", "position.token", "prices")->firstOrFail();
     }
 
-    function getByPositionId($positionId): Collection
+    function getByPositionId(int $positionId): Collection
     {
         return Order::wherePositionId($positionId)->with("position", "position.token", "prices")->get();
     }

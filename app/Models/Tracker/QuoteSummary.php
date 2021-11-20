@@ -14,16 +14,16 @@ class QuoteSummary
     private float $invested = 0;
     private Carbon $lastTickerUpdate;
 
-    public function getPnLInPrice(): float
+    public function getPnlInQuoteValue(): float
     {
-        return ($this->invested * $this->getPnLInPercentage()) - $this->invested;
+        return ($this->invested * $this->getPnlInPercentage()) - $this->invested;
     }
 
-    public function getPnLInPercentage(bool $formatted = false): float
+    public function getPnlInPercentage(bool $formatted = false): float
     {
         $percentage = $this->getAverageBuy() != 0 ? $this->actualPrice / $this->getAverageBuy() : 0;
         if ($formatted) {
-            return ($percentage - 1) * 100;
+            return round(($percentage - 1) * 100, 2);
         }
         return $percentage;
 

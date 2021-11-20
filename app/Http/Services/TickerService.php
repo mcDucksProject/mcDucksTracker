@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 class TickerService
 {
+    const MAX_TICKER_AGE = 3;
     private BinanceService $binanceService;
     private PairService $pairService;
 
@@ -20,11 +21,27 @@ class TickerService
         $this->pairService = $pairService;
     }
 
+    public function getPriceByPair(Pair $pair)
+    {
+        $now = new Carbon();
+        $ticker = Ticker::wherePairId($pair->id)->first();
+        if ($this->isTickerOutdated($ticker, $now)) {
+            $this->updateTickers();
+            return Ticker::wherePairId($pair->id)->first();
+        }
+        return $ticker;
+    }
+
+    private function isTickerOutdated($lastTicker, Carbon $now): bool
+    {
+        return is_null($lastTicker) || $now->diffInMinutes($lastTicker->ticker_date, true) >= self::MAX_TICKER_AGE;
+    }
+
     function updateTickers(): JsonResponse
     {
         $now = new Carbon();
         $lastTicker = Ticker::first();
-        if (is_null($lastTicker) || $now->diffInMinutes($lastTicker->ticker_date, true) >= 1) {
+        if ($this->isTickerOutdated($lastTicker, $now)) {
             $pairs = $this->pairService->getAll();
             $tickersData = $this->binanceService->getTickersData($pairs);
             $tickers = $this->parsePairPrices($tickersData, $now);
@@ -43,11 +60,6 @@ class TickerService
                 'price' => $tickerData['price']
             ];
         })->all();
-    }
-
-    public function getPriceByPair(Pair $pair)
-    {
-        return Ticker::wherePairId($pair->id)->first();
     }
 
 }
