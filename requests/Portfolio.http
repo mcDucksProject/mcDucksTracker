@@ -32,3 +32,9 @@ Accept: application/json
     "id": 2,
     "name": "updated name2"
 }
+
+###
+GET http://localhost:80/api/portfolio/1/summary
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

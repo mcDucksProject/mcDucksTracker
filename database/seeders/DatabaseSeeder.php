@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
                 'exchange_id' => 1
             ]
         );
+
         Token::insert([
             ['name' => 'BTC'],
             ['name' => 'USDT'],
@@ -56,9 +57,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'ADA'],
             ['name' => 'ROSE'],
             ['name' => 'ZIL'],
-            ['name' => 'SHIB']
+            ['name' => 'SHIB'],
+            ['name' => 'BTT'], //12
+            ['name' => 'EOS'], //13
+            ['name' => 'XTZ'], //14
+            ['name' => 'DOT'],
+            ['name' => 'IOTA'],
         ]);
-        $tokens = Token::whereNotIn('name', ['BTC', 'USDT', 'EUR'])->get();
+        $tokens = Token::whereNotIn('name',
+            ['BTC', 'USDT', 'EUR', 'SHIB', 'BTT', 'EOS', 'XTZ']
+        )->get();
         $date = new Carbon();
         $pairs = $tokens->flatMap(function ($token) use ($date) {
             return [
@@ -77,5 +85,43 @@ class DatabaseSeeder extends Seeder
             ];
         })->toArray();
         Pair::insert($pairs);
+        Pair::insert([
+            [
+                'quote_id' => 2,
+                'base_id' => 11,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+            [
+                'quote_id' => 7,
+                'base_id' => 5,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+            [
+                'quote_id' => 2,
+                'base_id' => 1,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+            [
+                'quote_id' => 2,
+                'base_id' => 12,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+            [
+                'quote_id' => 2,
+                'base_id' => 13,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+            [
+                'quote_id' => 2,
+                'base_id' => 14,
+                'created_at' => $date,
+                'updated_at' => $date
+            ],
+        ]);
     }
 }

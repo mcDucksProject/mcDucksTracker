@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderPriceController;
 use App\Http\Controllers\PairController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PortfolioSummaryController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PositionSummaryController;
 use App\Http\Controllers\TickerController;
@@ -63,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [PortfolioController::class, 'delete']);
         Route::get('/{id}', [PortfolioController::class, 'getById']);
         Route::get('', [PortfolioController::class, 'getByUser']);
+        Route::get('/{id}/summary', [PortfolioSummaryController::class, 'getPortfolioSummary']);
         Route::get('/{id}/positions', [PositionController::class, 'getByPortfolio']);
     });
 

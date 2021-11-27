@@ -5,13 +5,15 @@ namespace App\Models\Tracker;
 use App\Models\Pair;
 use Carbon\Carbon;
 
-class QuoteSummary
+class PositionQuoteSummary
 {
     private Pair $pair;
     private float $quantity = 0;
+    private float $averageBuy = 0;
     private float $averageSell = 0;
-    private float $actualPrice = 0;
+    private float $currentPrice = 0;
     private float $invested = 0;
+
     private Carbon $lastTickerUpdate;
 
     public function getPnlInQuoteValue(): float
@@ -21,7 +23,7 @@ class QuoteSummary
 
     public function getPnlInPercentage(bool $formatted = false): float
     {
-        $percentage = $this->getAverageBuy() != 0 ? $this->actualPrice / $this->getAverageBuy() : 0;
+        $percentage = $this->getAverageBuy() != 0 ? $this->currentPrice / $this->getAverageBuy() : 0;
         if ($formatted) {
             return round(($percentage - 1) * 100, 2);
         }
@@ -34,6 +36,16 @@ class QuoteSummary
         return $this->invested / $this->quantity;
     }
 
+    public function addToAverageBuy(float $price, float $quantity)
+    {
+        //$this->averageBuy
+    }
+
+    public function getCurrentInvestmentValue(): float
+    {
+        return $this->quantity * $this->currentPrice;
+    }
+
     /**
      * @return Carbon
      */
@@ -42,24 +54,18 @@ class QuoteSummary
         return $this->lastTickerUpdate;
     }
 
-    /**
-     * @param  Carbon  $lastTickerUpdate
-     *
-     * @return QuoteSummary
-     */
-    public function setLastTickerUpdate(Carbon $lastTickerUpdate): QuoteSummary
+    public function setLastTickerUpdate(Carbon $lastTickerUpdate): PositionQuoteSummary
     {
         $this->lastTickerUpdate = $lastTickerUpdate;
         return $this;
     }
 
-
-    public function getQuantity()
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
 
-    public function setQuantity(float $quantity): QuoteSummary
+    public function setQuantity(float $quantity): PositionQuoteSummary
     {
         $this->quantity = $quantity;
         return $this;
@@ -71,20 +77,20 @@ class QuoteSummary
         return $this->averageSell;
     }
 
-    public function setAverageSell(float $averageSell): QuoteSummary
+    public function setAverageSell(float $averageSell): PositionQuoteSummary
     {
         $this->averageSell = $averageSell;
         return $this;
     }
 
-    public function getActualPrice(): float
+    public function getCurrentPrice(): float
     {
-        return $this->actualPrice;
+        return $this->currentPrice;
     }
 
-    public function setActualPrice(float $actualPrice): QuoteSummary
+    public function setCurrentPrice(float $currentPrice): PositionQuoteSummary
     {
-        $this->actualPrice = $actualPrice;
+        $this->currentPrice = $currentPrice;
         return $this;
     }
 
@@ -93,13 +99,13 @@ class QuoteSummary
         return $this->invested;
     }
 
-    public function setInvested(float $invested): QuoteSummary
+    public function setInvested(float $invested): PositionQuoteSummary
     {
         $this->invested = $invested;
         return $this;
     }
 
-    public function addInvested(float $invested): QuoteSummary
+    public function addInvested(float $invested): PositionQuoteSummary
     {
         $this->invested += $invested;
         return $this;
@@ -110,7 +116,7 @@ class QuoteSummary
         return $this->pair;
     }
 
-    public function setPair(Pair $pair): QuoteSummary
+    public function setPair(Pair $pair): PositionQuoteSummary
     {
         $this->pair = $pair;
         return $this;

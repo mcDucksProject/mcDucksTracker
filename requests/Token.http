@@ -48,7 +48,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-GET http://localhost:80/api/token/7/pairs
+GET http://localhost:80/api/token/5/pairs
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json

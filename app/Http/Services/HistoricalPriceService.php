@@ -16,6 +16,7 @@ class HistoricalPriceService
 {
     const TIMEFRAME = '1d';
     const MAX_CANDLES = 365;
+    const MAX_DIF_IN_HOURS = 0;
     private PairService $pairService;
     private BinanceService $binanceService;
 
@@ -56,7 +57,7 @@ class HistoricalPriceService
 
     function findByPairAndDate(int $pairId, Carbon $date): Collection
     {
-        return HistoricalPrice::wherePairId($pairId)->whereDate('price_date',$date)->get();
+        return HistoricalPrice::wherePairId($pairId)->whereDate('price_date', $date->startOfDay())->get();
     }
 
     function findByPairBetweenDates($pairId, $startDate, $endDate): Collection
@@ -82,7 +83,7 @@ class HistoricalPriceService
             $originalDate = new Carbon();
             $since = $originalDate->subDays(self::MAX_CANDLES);
         } else {
-            if ($lastPrice->price_date->diffInDays(new Carbon()) <= 0) {
+            if ($lastPrice->price_date->diffInHours(new Carbon()) <= self::MAX_DIF_IN_HOURS) {
                 return false;
             }
             $since = $lastPrice->price_date;
@@ -95,17 +96,18 @@ class HistoricalPriceService
 
     private function getHistoricalData(Collection $pairs, $since): Collection
     {
-
+        $now = new Carbon();
         return $this->binanceService->getHistoricalData($pairs,
             self::TIMEFRAME,
-            $since,
-            self::MAX_CANDLES)->flatMap(function ($historicalData) {
+            $since)->flatMap(function ($historicalData) use ($now) {
 
-            return $historicalData['data']->map(function ($data) use ($historicalData) {
+            return $historicalData['data']->map(function ($data) use ($historicalData, $now) {
                 return [
                     'pair_id' => $historicalData['pair']->id,
                     'price' => $data['price'],
-                    'price_date' => $data['date']
+                    'price_date' => $data['date'],
+                    'updated_at' => $now,
+                    'created_at' => $now
                 ];
             });
         });

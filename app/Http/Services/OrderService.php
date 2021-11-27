@@ -87,14 +87,15 @@ class OrderService
                 /** @var HistoricalPrice $price */
                 $price = $this->historicalPriceService->findByPairAndDate(
                     $pair->id,
-                    $date->startOfDay()
+                    $date
                 )->first();
                 try {
                     $this->orderPriceService->create(
                         $order,
                         $order->user_id,
                         $pair->id,
-                        $price->price
+                        $price->price,
+                        true
                     );
                 } catch (SaveException $e) {
                     throw new CalculatePricesException();
