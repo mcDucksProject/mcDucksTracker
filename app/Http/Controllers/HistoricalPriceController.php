@@ -74,7 +74,11 @@ class HistoricalPriceController extends Controller
 
     function updateHistoricalData(): JsonResponse
     {
-        $this->historicalPriceService->updateHistoricalPrices();
-        return new JsonResponse();
+        try {
+            $this->historicalPriceService->updateHistoricalPrices();
+        } catch (SaveException $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse("Historical data updated successfully");
     }
 }

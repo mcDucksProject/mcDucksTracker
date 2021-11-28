@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Exceptions\DeleteException;
+use App\Exceptions\NotFoundException;
 use App\Exceptions\SaveException;
 use App\Http\Services\Exchange\BinanceService;
 use App\Models\HistoricalPrice;
@@ -10,6 +11,7 @@ use App\Models\Pair;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\ItemNotFoundException;
 use Throwable;
 
 class HistoricalPriceService
@@ -17,12 +19,10 @@ class HistoricalPriceService
     const TIMEFRAME = '1d';
     const MAX_CANDLES = 365;
     const MAX_DIF_IN_HOURS = 0;
-    private PairService $pairService;
     private BinanceService $binanceService;
 
-    function __construct(PairService $pairService, BinanceService $binanceService)
+    function __construct(BinanceService $binanceService)
     {
-        $this->pairService = $pairService;
         $this->binanceService = $binanceService;
     }
 
@@ -68,30 +68,56 @@ class HistoricalPriceService
             ->get();
     }
 
+    /**
+     * @throws NotFoundException
+     */
     function findByPair($pairId): Collection
     {
-        return HistoricalPrice::wherePairId($pairId)->get();
+        $historicalPrices = HistoricalPrice::wherePairId($pairId)->orderByDesc('price_date')->get();
+        if ($historicalPrices->isEmpty()) {
+            throw new NotFoundException();
+        }
+        return $historicalPrices;
     }
 
-    function updateHistoricalPrices(): bool
+    /**
+     * @throws SaveException
+     */
+    function updateHistoricalPrice(Pair $pair): bool
     {
-        $pairs = $this->pairService->getAll();
-        /** @var HistoricalPrice $lastPrice */
-        $lastPrice = HistoricalPrice::orderBy('price_date', 'desc')->first();
+        return $this->updateHistoricalPrices(collect([$pair]));
+    }
 
-        if (is_null($lastPrice)) {
-            $originalDate = new Carbon();
-            $since = $originalDate->subDays(self::MAX_CANDLES);
-        } else {
-            if ($lastPrice->price_date->diffInHours(new Carbon()) <= self::MAX_DIF_IN_HOURS) {
-                return false;
+    /**
+     * @throws SaveException
+     */
+    function updateHistoricalPrices(Collection $pairs): bool
+    {
+        $earliestDate = new Carbon();
+        $pairsToUpdate = $pairs->mapToGroups(function (Pair $pair) use (&$earliestDate) {
+            return $this->mapPairToUpdateGroup($pair, $earliestDate);
+        });
+
+        if ($pairsToUpdate->has('update')) {
+            $updatedHistoricalData = $this->getHistoricalData(
+                $pairsToUpdate->get('update'),
+                $earliestDate
+            );
+            if (!HistoricalPrice::updateOrInsert(['pair_id', 'price_date'], $updatedHistoricalData)) {
+                throw new SaveException("There was a problem updating historical data");
             }
-            $since = $lastPrice->price_date;
         }
-        $historicalData = $this->getHistoricalData($pairs, $since);
-        return HistoricalPrice::insert(
-            $historicalData->toArray()
-        );
+        if ($pairsToUpdate->has('new')) {
+            $since = new Carbon();
+            $newHistoricalData = $this->getHistoricalData(
+                $pairsToUpdate->get('new'),
+                $since->subDays(self::MAX_CANDLES)
+            );
+            if (!HistoricalPrice::insert($newHistoricalData->toArray())) {
+                throw new SaveException("There was a problem creating new historical data");
+            }
+        }
+        return true;
     }
 
     private function getHistoricalData(Collection $pairs, $since): Collection
@@ -111,5 +137,21 @@ class HistoricalPriceService
                 ];
             });
         });
+    }
+
+    private function mapPairToUpdateGroup(Pair $pair, Carbon &$earliestDate): array
+    {
+        try {
+            $lastHistoricalPrice = $this->findByPair($pair)->firstOrFail();
+        } catch (NotFoundException | ItemNotFoundException $exception) {
+            return ['new' => $pair];
+        }
+        if ($lastHistoricalPrice->price_date->diffInHours(new Carbon()) <= self::MAX_DIF_IN_HOURS) {
+            return ['ignore' => $pair];
+        }
+        $earliestDate = $earliestDate->diffInHours($lastHistoricalPrice) < 0
+            ? $lastHistoricalPrice
+            : $earliestDate;
+        return ['update' => $pair];
     }
 }

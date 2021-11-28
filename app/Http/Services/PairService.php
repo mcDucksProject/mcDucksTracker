@@ -22,7 +22,7 @@ class PairService
             $pair->quote_id = $quoteId;
             $pair->saveOrFail();
         } catch (Throwable $e) {
-            throw new SaveException();
+            throw new SaveException($e->getMessage());
         }
         return $pair;
     }
