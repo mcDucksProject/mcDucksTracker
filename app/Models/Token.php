@@ -36,6 +36,8 @@ class Token extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     function pairs(): HasMany
     {
         return $this->hasMany(Pair::class, "base_id");

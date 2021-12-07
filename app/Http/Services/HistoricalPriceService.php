@@ -50,7 +50,7 @@ class HistoricalPriceService
     {
         try {
             HistoricalPrice::findOrFail($historicalPriceId)->deleteOrFail();
-        } catch (ModelNotFoundException | Throwable $e) {
+        } catch (ModelNotFoundException|Throwable $e) {
             throw new DeleteException();
         }
     }
@@ -103,9 +103,14 @@ class HistoricalPriceService
                 $pairsToUpdate->get('update'),
                 $earliestDate
             );
-            if (!HistoricalPrice::updateOrInsert(['pair_id', 'price_date'], $updatedHistoricalData)) {
-                throw new SaveException("There was a problem updating historical data");
-            }
+            $updatedHistoricalData->each(function ($historicalData) {
+                if (!HistoricalPrice::updateOrCreate([
+                    'pair_id' => $historicalData['pair_id'],
+                    'price_date' => $historicalData['price_date']
+                ], $historicalData)) {
+                    throw new SaveException("There was a problem updating historical data");
+                }
+            });
         }
         if ($pairsToUpdate->has('new')) {
             $since = new Carbon();
@@ -143,7 +148,7 @@ class HistoricalPriceService
     {
         try {
             $lastHistoricalPrice = $this->findByPair($pair)->firstOrFail();
-        } catch (NotFoundException | ItemNotFoundException $exception) {
+        } catch (NotFoundException|ItemNotFoundException $exception) {
             return ['new' => $pair];
         }
         if ($lastHistoricalPrice->price_date->diffInHours(new Carbon()) <= self::MAX_DIF_IN_HOURS) {

@@ -14,3 +14,4 @@ yarn-error.log
 /.idea
 /.vscode
 requests/bodies/*
+!requests/bodies/*Example.json

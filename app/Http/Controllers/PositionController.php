@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use App\Exceptions\SaveException;
 use App\Exceptions\UpdateException;
 use App\Http\Services\OrderService;
-use App\Http\Services\PortfolioService;
 use App\Http\Services\PositionService;
 use App\Http\Services\TokenService;
 use App\Models\Portfolio;
 use Auth;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -22,18 +21,15 @@ class PositionController extends Controller
     private PositionService $positionService;
     private OrderService $orderService;
     private TokenService $tokenService;
-    private PortfolioService $portfolioService;
 
     public function __construct(
         PositionService $positionService,
         OrderService $orderService,
-        TokenService $tokenService,
-        PortfolioService $portfolioService
+        TokenService $tokenService
     ) {
         $this->positionService = $positionService;
         $this->orderService = $orderService;
         $this->tokenService = $tokenService;
-        $this->portfolioService = $portfolioService;
     }
 
     function create(Request $request): JsonResponse
@@ -74,7 +70,7 @@ class PositionController extends Controller
                 });
             }
 
-        } catch (NotFoundHttpException | ModelNotFoundException | SaveException $e) {
+        } catch (NotFoundHttpException|ModelNotFoundException|SaveException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $position->refresh();
@@ -91,7 +87,7 @@ class PositionController extends Controller
             $position = $this->positionService->update(
                 $params['holding_id'],
                 $request->get('expected_sell'));
-        } catch (UpdateException | ModelNotFoundException $e) {
+        } catch (UpdateException|ModelNotFoundException $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return new JsonResponse($position, Response::HTTP_OK);

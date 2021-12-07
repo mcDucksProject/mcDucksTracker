@@ -41,10 +41,11 @@ class PairController extends Controller
     function getById($id): JsonResponse
     {
         try {
-            $this->pairService->getById($id);
+            $pair = $this->pairService->getById($id);
         } catch (ModelNotFoundException $e) {
             return new JsonResponse('', Response::HTTP_NO_CONTENT);
         }
+        return new JsonResponse($pair);
     }
 
     function getByBaseId($id): JsonResponse

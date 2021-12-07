@@ -35,7 +35,7 @@ class ExchangeService
             $exchange = Exchange::findOrFail($id);
             $exchange->name = $name;
             $exchange->saveOrFail();
-        } catch (ModelNotFoundException | \Throwable $e) {
+        } catch (ModelNotFoundException|\Throwable $e) {
             throw new UpdateException();
         }
         return $exchange;
@@ -44,12 +44,12 @@ class ExchangeService
     /**
      * @throws DeleteException
      */
-    function delete($id): Exchange
+    function delete($id): void
     {
         try {
             $exchange = Exchange::findOrFail($id);
             $exchange->deleteOrFail();
-        } catch (ModelNotFoundException | \Throwable $e) {
+        } catch (ModelNotFoundException|\Throwable $e) {
             throw new DeleteException();
         }
     }

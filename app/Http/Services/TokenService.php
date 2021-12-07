@@ -29,16 +29,16 @@ class TokenService
     /**
      * @throws UpdateException
      */
-    function update(int $tokenId, string $name = "")
+    function update(int $tokenId, string $name = ""): Token
     {
         try {
-            $token = Token::findOrFail($tokenId);
+            $token = $this->getById($tokenId);
             if ($name != "") {
                 $token->name = $name;
             }
             $token->saveOrFail();
         } catch (\Throwable $e) {
-            throw new UpdateException();
+            throw new UpdateException("There was an error updating. " . $e->getMessage());
         }
         return $token;
     }
@@ -46,10 +46,10 @@ class TokenService
     /**
      * @throws DeleteException
      */
-    function delete($tokenId)
+    function delete($tokenId): void
     {
         try {
-            $token = Token::findOrFail($tokenId);
+            $token = $this->getById($tokenId);
             $token->deleteOrFail();
         } catch (\Throwable $e) {
             throw new DeleteException();

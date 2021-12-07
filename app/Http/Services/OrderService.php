@@ -9,8 +9,8 @@ use App\Models\HistoricalPrice;
 use App\Models\Order;
 use App\Models\Pair;
 use App\Models\Position;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use LogicException;
 use Throwable;
@@ -53,7 +53,7 @@ class OrderService
                 $this->calculatePrices($order, $date, $prices, $calculateOtherPairs);
             }
             return $order;
-        } catch (Throwable | ModelNotFoundException $e) {
+        } catch (Throwable|ModelNotFoundException $e) {
             throw new SaveException();
         }
     }
@@ -144,7 +144,7 @@ class OrderService
         try {
             $order = Order::findOrFail($orderId);
             $order->delete();
-        } catch (ModelNotFoundException | LogicException $e) {
+        } catch (ModelNotFoundException|LogicException $e) {
             throw new DeleteException();
         }
 
