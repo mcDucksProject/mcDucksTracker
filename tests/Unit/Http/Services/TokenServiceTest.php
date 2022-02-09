@@ -25,7 +25,7 @@ class TokenServiceTest extends TestCase
      */
     public function testShouldCreateToken()
     {
-        $tokenModel = Mockery::mock('overload:App\Models\Token');
+        $tokenModel = Mockery::mock('overload:' . Token::class);
         $tokenModel->shouldReceive('saveOrFail')
             ->andReturnTrue();
         $tokenService = new TokenService();
