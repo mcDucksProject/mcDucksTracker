@@ -9,8 +9,8 @@ use App\Models\HistoricalPrice;
 use App\Models\Order;
 use App\Models\Pair;
 use App\Models\Position;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use LogicException;
 use Throwable;
@@ -37,7 +37,7 @@ class OrderService
         string $type,
         Carbon $date,
         Collection $prices,
-        $calculateOtherPairs = false
+        bool $calculateOtherPairs = false
     ): Order {
         try {
             $order = new Order();
@@ -53,7 +53,7 @@ class OrderService
                 $this->calculatePrices($order, $date, $prices, $calculateOtherPairs);
             }
             return $order;
-        } catch (Throwable | ModelNotFoundException $e) {
+        } catch (Throwable|ModelNotFoundException $e) {
             throw new SaveException();
         }
     }
@@ -65,7 +65,7 @@ class OrderService
         Order $order,
         Carbon $date,
         Collection $prices,
-        $calculateOtherPairs
+        bool $calculateOtherPairs = false
     ): void {
         $pairs = $order->position->token->pairs;
 
@@ -87,14 +87,15 @@ class OrderService
                 /** @var HistoricalPrice $price */
                 $price = $this->historicalPriceService->findByPairAndDate(
                     $pair->id,
-                    $date->startOfDay()
+                    $date
                 )->first();
                 try {
                     $this->orderPriceService->create(
                         $order,
                         $order->user_id,
                         $pair->id,
-                        $price->price
+                        $price->price,
+                        true
                     );
                 } catch (SaveException $e) {
                     throw new CalculatePricesException();
@@ -107,18 +108,18 @@ class OrderService
      * @throws SaveException
      */
     function update(
-        $orderId,
-        $quantity = "",
-        $status = "",
-        $type = "",
-        $date = ""
+        int $orderId,
+        float $quantity = 0.0,
+        string $status = "",
+        string $type = "",
+        Carbon $date = null
     ): Order {
         try {
             $order = Order::findOrFail($orderId);
-            if ($quantity != "") {
+            if ($quantity != 0.0) {
                 $order->quantity = $quantity;
             }
-            if ($date != "") {
+            if ($date != null) {
                 $order->order_date = $date;
             }
             if ($status != "") {
@@ -138,12 +139,12 @@ class OrderService
     /**
      * @throws DeleteException
      */
-    function delete($orderId)
+    function delete(int $orderId)
     {
         try {
             $order = Order::findOrFail($orderId);
             $order->delete();
-        } catch (ModelNotFoundException | LogicException $e) {
+        } catch (ModelNotFoundException|LogicException $e) {
             throw new DeleteException();
         }
 
@@ -152,12 +153,12 @@ class OrderService
     /**
      * @throws ModelNotFoundException
      */
-    function getById($orderId): Order
+    function getById(int $orderId): Order
     {
         return Order::whereId($orderId)->with("position", "position.token", "prices")->firstOrFail();
     }
 
-    function getByPositionId($positionId): Collection
+    function getByPositionId(int $positionId): Collection
     {
         return Order::wherePositionId($positionId)->with("position", "position.token", "prices")->get();
     }

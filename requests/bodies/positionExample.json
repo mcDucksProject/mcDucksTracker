@@ -1,0 +1,37 @@
+{
+    "token": {
+        "name": "ADA"
+    },
+    "portfolio": {
+        "id": 1
+    },
+    "status": "open",
+    "orders": [
+        {
+            "quantity": 49.6,
+            "type": "buy",
+            "date": "2021-10-29 20:19",
+            "prices": [
+                {
+                    "quote": "USDT",
+                    "price": 2.015
+                }
+            ]
+        },
+        {
+            "quantity": 200,
+            "type": "buy",
+            "date": "2021-08-29 20:20",
+            "prices": [
+                {
+                    "quote": "BTC",
+                    "price": 0.00003224
+                },
+                {
+                    "quote": "USDT",
+                    "price": 2.015
+                }
+            ]
+        }
+    ]
+}

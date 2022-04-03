@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\DeleteException;
 use App\Exceptions\SaveException;
 use App\Http\Services\HistoricalPriceService;
+use App\Http\Services\PairService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,10 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 class HistoricalPriceController extends Controller
 {
     private HistoricalPriceService $historicalPriceService;
+    private PairService $pairService;
 
-    function __construct(HistoricalPriceService $historicalPriceService)
+    function __construct(HistoricalPriceService $historicalPriceService, PairService $pairService)
     {
         $this->historicalPriceService = $historicalPriceService;
+        $this->pairService = $pairService;
     }
 
     function create(Request $request): JsonResponse
@@ -74,7 +77,11 @@ class HistoricalPriceController extends Controller
 
     function updateHistoricalData(): JsonResponse
     {
-        $this->historicalPriceService->updateHistoricalPrices();
-        return new JsonResponse();
+        try {
+            $this->historicalPriceService->updateHistoricalPrices($this->pairService->getAll());
+        } catch (SaveException $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse("Historical data updated successfully");
     }
 }

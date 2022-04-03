@@ -15,7 +15,7 @@ class PositionSummary
 
     public function __construct()
     {
-        $this->quotesSummary = new Collection(QuoteSummary::class);
+        $this->quotesSummary = new Collection(PositionQuoteSummary::class);
         $this->quantity = 0;
     }
 
@@ -41,7 +41,7 @@ class PositionSummary
         return $this;
     }
 
-    public function addQuoteSummary(QuoteSummary $quotesSummary): PositionSummary
+    public function addQuoteSummary(PositionQuoteSummary $quotesSummary): PositionSummary
     {
         $this->quotesSummary->add($quotesSummary);
         return $this;

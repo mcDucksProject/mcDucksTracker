@@ -4,7 +4,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 {
-    "name": "ICP"
+    "name": "MANA"
 }
 
 ###
@@ -18,7 +18,7 @@ Accept: application/json
 }
 
 ###
-GET http://localhost:80/api/token/1
+GET http://localhost:80/api/token/17
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
@@ -30,13 +30,13 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/token/5/pair/1
+POST http://localhost:80/api/token/17/pair/1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-POST http://localhost:80/api/token/5/pair/2
+POST http://localhost:80/api/token/17/pair/2
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
@@ -48,7 +48,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
-GET http://localhost:80/api/token/4/pairs
+GET http://localhost:80/api/token/17/pairs
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
